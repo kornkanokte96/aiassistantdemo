@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT Dot — Executive Chief of Staff Demo</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --chatgpt-bg: #212121;
+      --chatgpt-sidebar: #171717;
+      --chatgpt-surface: #2f2f2f;
+      --chatgpt-surface-hover: #383838;
+      --chatgpt-border: rgba(255, 255, 255, 0.12);
+      --chatgpt-text: #ececec;
+      --chatgpt-muted: #b4b4b4;
+      --chatgpt-green: #10a37f;
+      --chatgpt-dot-accent: #ab68ff;
+      --font-ui: 'Inter', 'IBM Plex Sans Thai', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #111111;
+      color: var(--chatgpt-text);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      line-height: 1.6;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP GLOBAL BAR */
+    .global-bar {
+      background: #0d0d0d;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 24px;
+      height: 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .openai-logo {
+      width: 22px;
+      height: 22px;
+      fill: #ececec;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-badge {
+      background: linear-gradient(135deg, #ab68ff, #7928ca);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mode-tab-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ccc;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .mode-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .mode-tab-btn.active {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* MAIN WRAPPER */
+    .app-stage {
+      flex: 1;
+      padding: 14px 20px 18px;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    /* REAL CHATGPT DOT APP CONTAINER */
+    .chatgpt-app-window {
+      width: 100%;
+      max-width: 1360px;
+      background: var(--chatgpt-bg);
+      border: 1px solid var(--chatgpt-border);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 268px 1fr;
+      height: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (max-width: 900px) {
+      .chatgpt-app-window {
+        grid-template-columns: 1fr;
+      }
+      .chatgpt-sidebar {
+        display: none;
+      }
+    }
+
+    /* LEFT SIDEBAR (AUTHENTIC CHATGPT) */
+    .chatgpt-sidebar {
+      background: var(--chatgpt-sidebar);
+      border-right: 1px solid var(--chatgpt-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 14px 12px;
+      user-select: none;
+      overflow-y: auto;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .new-chat-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #ececec;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .new-chat-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8e8e8e;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 0 8px;
+      margin-top: 4px;
+    }
+
+    .sidebar-dots-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dot-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #e3e3e3;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .dot-sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .dot-sidebar-item.active {
+      background: rgba(171, 104, 255, 0.12);
+      border-color: rgba(171, 104, 255, 0.35);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .dot-icon-glyph {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ab68ff, #7928ca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .pulse-live {
+      width: 7px;
+      height: 7px;
+      background: #10a37f;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10a37f;
+      margin-left: auto;
+    }
+
+    .sidebar-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-history-item {
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #b4b4b4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid transparent;
+    }
+
+    .sidebar-history-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .sidebar-history-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .history-dot-tag {
+      font-size: 10px;
+      color: #888;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    .user-profile-tile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .user-profile-tile:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10a37f, #0d8a6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .user-meta-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .user-meta-tier {
+      font-size: 11px;
+      color: #8e8e8e;
+    }
+
+    /* RIGHT MAIN DOT INTERFACE */
+    .dot-main-canvas {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--chatgpt-bg);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* DOT AGENT HEADER */
+    .dot-canvas-header {
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--chatgpt-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(33, 33, 33, 0.95);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+
+    .dot-info-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dot-hero-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ab68ff 0%, #6830d9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(171, 104, 255, 0.35);
+    }
+
+    .dot-header-text h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-cloud-indicator {
+      font-size: 11px;
+      color: #9cd3be;
+      background: rgba(16, 163, 127, 0.15);
+      border: 1px solid rgba(16, 163, 127, 0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dot-header-text p {
+      font-size: 12px;
+      color: #a0a0a0;
+    }
+
+    .dot-actions-cluster {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-dot-action {
+      background: var(--chatgpt-surface);
+      border: 1px solid var(--chatgpt-border);
+      color: #ececec;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-dot-action:hover {
+      background: var(--chatgpt-surface-hover);
+    }
+
+    /* CHAT STREAM & RECENT ACTIVITY FEED */
+    .dot-chat-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .dot-chat-stream::-webkit-scrollbar {
+      width: 6px;
+    }
+    .dot-chat-stream::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    /* THREAD VIEW PANELS */
+    .thread-panel {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .thread-panel.active {
+      display: flex;
+    }
+
+    /* PERSISTENT ROUTINE SUMMARY CARD */
+    .routine-banner-card {
+      background: #1b2623;
+      border: 1px solid #234e40;
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .routine-banner-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .routine-banner-desc {
+      font-size: 12px;
+      color: #a7c5bc;
+      margin-top: 2px;
+    }
+
+    /* REASONING DISCLOSURE */
+    .thought-disclosure {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 7px 13px;
+      font-size: 12px;
+      color: #9e9e9e;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      user-select: none;
+    }
+
+    .thought-disclosure:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .thought-steps-box {
+      display: none;
+      background: #1a1a1a;
+      border-left: 2px solid #ab68ff;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #9e9e9e;
+      line-height: 1.7;
+    }
+
+    /* MESSAGE BUBBLES */
+    .chat-row {
+      display: flex;
+      gap: 14px;
+      max-width: 920px;
+      width: 100%;
+    }
+
+    .chat-row.user {
+      justify-content: flex-end;
+      align-self: flex-end;
+    }
+
+    .chat-avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ab68ff, #7928ca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .user-msg-pill {
+      background: var(--chatgpt-surface);
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #fff;
+      max-width: 80%;
+    }
+
+    .assistant-msg-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: #ececec;
+      font-size: 14px;
+    }
+
+    /* TOOL USAGE PILLS */
+    .tools-called-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tool-pill {
+      background: #17242c;
+      border: 1px solid #233b47;
+      color: #6ee7b7;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 3px 10px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* INTERACTIVE ACTION CARDS */
+    .deliverable-card {
+      background: #282828;
+      border: 1px solid #3c3c3c;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .deliverable-card:hover {
+      border-color: #525252;
+    }
+
+    .deliverable-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .deliverable-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .urgency-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(225, 29, 72, 0.2);
+      color: #fb7185;
+      border: 1px solid rgba(225, 29, 72, 0.4);
+    }
+
+    .draft-preview-box {
+      background: #1e1e1e;
+      border: 1px solid #333333;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.6;
+      white-space: pre-line;
+      margin-bottom: 12px;
+    }
+
+    .draft-textarea {
+      width: 100%;
+      background: #161616;
+      border: 1px solid #ab68ff;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      color: #fff;
+      font-family: inherit;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      resize: vertical;
+      min-height: 110px;
+      outline: none;
+    }
+
+    .action-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-approve-primary {
+      background: #10a37f;
+      color: #fff;
+      border: none;
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-approve-primary:hover {
+      background: #0d8a6b;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #4a4a4a;
+      color: #ccc;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    /* AUDIO PLAYER BAR FOR MORNING BRIEF */
+    .audio-player-bar {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: #192724;
+      border: 1px solid #10a37f;
+      padding: 8px 14px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #6ee7b7;
+    }
+
+    /* DOT HUB OVERVIEW GRID (WHEN CLICKING DOT PROFILE IN SIDEBAR) */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 800px) {
+      .hub-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hub-stat-card {
+      background: #262626;
+      border: 1px solid #3a3a3a;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .hub-stat-card:hover {
+      border-color: #ab68ff;
+      transform: translateY(-2px);
+    }
+
+    /* AUTHENTIC CHATGPT INPUT BAR */
+    .dot-input-container {
+      padding: 12px 28px 16px;
+      background: linear-gradient(180deg, rgba(33, 33, 33, 0) 0%, rgba(33, 33, 33, 0.95) 25%, #212121 100%);
+      flex-shrink: 0;
+    }
+
+    .suggestion-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .s-pill {
+      background: #2a2a2a;
+      border: 1px solid #383838;
+      color: #cfcfcf;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .s-pill:hover {
+      background: #333333;
+      border-color: #555555;
+      color: #fff;
+    }
+
+    .input-box-wrapper {
+      background: #2f2f2f;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 26px;
+      padding: 8px 12px 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .input-box-wrapper:focus-within {
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .chatgpt-input-field {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .send-arrow-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: none;
+      color: #000000;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .send-arrow-btn:hover {
+      opacity: 0.85;
+    }
+
+    /* iPHONE / iMESSAGE VIEW (TOGGLEABLE) */
+    .imessage-modal-view {
+      display: none;
+      width: 420px;
+      margin: 0 auto;
+      background: #000;
+      border-radius: 42px;
+      border: 3px solid #333;
+      padding: 14px 14px 20px;
+      height: 100%;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #182925;
+      border: 1px solid #10a37f;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 9999;
+    }
+
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* SETTINGS MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #252525;
+      border: 1px solid #3c3c3c;
+      border-radius: 16px;
+      width: 480px;
+      max-width: 92%;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP GLOBAL HEADER -->
+  <header class="global-bar">
+    <div class="brand-cluster">
+      <svg class="openai-logo" viewBox="0 0 24 24">
+        <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1683a.071.071 0 0 1 .038.052v5.5826a4.5045 4.5045 0 0 1-4.4945 4.4947zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4997 4.4997 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1683a.0757.0757 0 0 1-.071 0l-4.8303-2.7866A4.5045 4.5045 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.5973 8.3829l2.02-1.1683a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4947 4.4947 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.4022-.6815zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4997 4.4997 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1635a.0804.0804 0 0 1-.038-.0567V6.0748a4.4997 4.4997 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.4598a.7948.7948 0 0 0-.3927.6814zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>
+      </svg>
+      <div class="brand-title">
+        ChatGPT <span class="dot-badge">DOTS</span>
+      </div>
+    </div>
+
+    <!-- Toggle Modes -->
+    <div class="top-actions">
+      <button id="btnAppMode" class="mode-tab-btn active" onclick="switchMainView('app')">
+        <span>💻 ChatGPT Dot (Official App UI)</span>
+      </button>
+      <button id="btnPhoneMode" class="mode-tab-btn" onclick="switchMainView('phone')">
+        <span>📱 Texting via iMessage</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN STAGE -->
+  <div class="app-stage">
+
+    <!-- 1. REAL CHATGPT DOT APP -->
+    <main id="viewAppContainer" class="chatgpt-app-window">
+      
+      <!-- LEFT SIDEBAR -->
+      <aside class="chatgpt-sidebar">
+        <div class="sidebar-top">
+          <button class="new-chat-btn" onclick="selectSidebarThread('new')">
+            <span>+ New task / chat</span>
+            <span style="font-size:11px; opacity:0.6;">⌘K</span>
+          </button>
+
+          <!-- YOUR PRIMARY DOT (SINGLE UNIFIED AGENT AS IN REAL CHATGPT DOTS) -->
+          <div class="sidebar-section-title">Your Primary Dot</div>
+          <div class="sidebar-dots-list">
+            <div id="navDotHub" class="dot-sidebar-item" onclick="selectSidebarThread('hub')">
+              <div class="dot-icon-glyph">●</div>
+              <div>
+                <div>Dot · Chief of Staff</div>
+                <div style="font-size:11px; color:#10a37f;">Active on Cloud · 3 Routines</div>
+              </div>
+              <div class="pulse-live" title="Always-on background execution"></div>
+            </div>
+          </div>
+
+          <!-- RECENT CHAT HISTORY (ALL CLICKABLE WITH FULL SAMPLE CHATS) -->
+          <div class="sidebar-section-title" style="margin-top:10px;">Recent History</div>
+          <div class="sidebar-history-list">
+            <div id="navSweep" class="sidebar-history-item active" onclick="selectSidebarThread('sweep')">
+              <span>07:00 AM Executive Sweep</span>
+              <span class="history-dot-tag">07:00</span>
+            </div>
+            <div id="navSla" class="sidebar-history-item" onclick="selectSidebarThread('sla')">
+              <span>Board SLA Review Follow-up</span>
+              <span class="history-dot-tag">Yesterday</span>
+            </div>
+            <div id="navRevenue" class="sidebar-history-item" onclick="selectSidebarThread('revenue')">
+              <span>Quarterly Revenue Summary</span>
+              <span class="history-dot-tag">Oct 28</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- USER PROFILE FOOTER -->
+        <div class="user-profile-tile" onclick="toggleSettingsModal()">
+          <div class="user-avatar">C</div>
+          <div>
+            <div class="user-meta-name">CEO / Managing Director</div>
+            <div class="user-meta-tier">ChatGPT Pro · Primary Dot Active</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT CANVAS (MAIN DOT INTERFACE) -->
+      <section class="dot-main-canvas">
+        
+        <!-- DOT PROFILE / CANVAS HEADER -->
+        <div class="dot-canvas-header">
+          <div class="dot-info-cluster">
+            <div class="dot-hero-avatar">●</div>
+            <div class="dot-header-text">
+              <h3>
+                Dot · Executive Chief of Staff
+                <span class="dot-cloud-indicator">
+                  <span style="width:6px; height:6px; background:#10a37f; border-radius:50%;"></span>
+                  Always-on Agent (GPT-6 Astra)
+                </span>
+              </h3>
+              <p id="headerSubText">Dedicated Cloud Computer · Sub-Agents: Email Triage, Calendar Guardian, News Brief</p>
+            </div>
+          </div>
+
+          <div class="dot-actions-cluster">
+            <button class="btn-dot-action" onclick="runSweepAgain()">
+              <span>⚡ Re-run Routine</span>
+            </button>
+            <button class="btn-dot-action" onclick="toggleSettingsModal()">
+              <span>⚙️ Settings</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- MAIN MESSAGE STREAM -->
+        <div class="dot-chat-stream" id="dotStream">
+
+          <!-- ======================================================== -->
+          <!-- THREAD 0: DOT · CHIEF OF STAFF (AGENT HUB & ROUTINES)    -->
+          <!-- ======================================================== -->
+          <div id="thread-hub" class="thread-panel">
+            <div class="routine-banner-card" style="background:linear-gradient(135deg, #241934, #18242c); border-color:#583585;">
+              <div>
+                <div class="routine-banner-title" style="color:#d8b4fe;">
+                  <span>🟣</span> Dot · Chief of Staff — Active Responsibilities & Background Sub-Agents
+                </div>
+                <div class="routine-banner-desc" style="color:#cbd5e1;">
+                  ใน ChatGPT Dot ผู้บริหารมี Primary Dot เพียงตัวเดียวที่คอยแตกงาน (Orchestrate) ให้ 3 ทักษะย่อยทำงานเบื้องหลังบน Cloud VM ตลอด 24 ชม.
+                </div>
+              </div>
+              <button onclick="selectSidebarThread('sweep')" class="btn-approve-primary" style="background:#ab68ff; white-space:nowrap;">
+                ดูผลรัน 07:00 AM ล่าสุด →
+              </button>
+            </div>
+
+            <div class="hub-grid">
+              <div class="hub-stat-card" onclick="selectSidebarThread('sweep')">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-size:20px;">📧</span>
+                  <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">Active · Every 30m</span>
+                </div>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">1. Email Triage & Draft</h4>
+                <p style="font-size:12px; color:#9e9e9e;">สแกนอีเมลใหม่ คัดแยกความเร่งด่วน (0–100) และร่างคำตอบอิงสัญญาเดิมรอให้กด Approve</p>
+              </div>
+
+              <div class="hub-stat-card" onclick="selectSidebarThread('sweep')">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-size:20px;">📅</span>
+                  <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">Active · Real-time</span>
+                </div>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">2. Calendar Guardian</h4>
+                <p style="font-size:12px; color:#9e9e9e;">ปกป้องเวลาประชุมบอร์ดและช่วง Deep Work พร้อมเสนอเวลาเลื่อนนัดให้อัตโนมัติเมื่อเกิดนัดชน</p>
+              </div>
+
+              <div class="hub-stat-card" onclick="selectSidebarThread('sweep')">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-size:20px;">📰</span>
+                  <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">Daily · 07:00 AM</span>
+                </div>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">3. Morning News Brief</h4>
+                <p style="font-size:12px; color:#9e9e9e;">กวาดข่าว AI, ตลาดทุน และคู่แข่ง สรุปเป็น Executive TL;DR 3 นาที พร้อมโหมดฟังเสียง</p>
+              </div>
+            </div>
+
+            <div class="chat-row user">
+              <div class="user-msg-pill">
+                ขอดูสถานะภาพรวมของงานที่ตั้ง Routine ไว้ทั้งหมดในสัปดาห์นี้หน่อย
+              </div>
+            </div>
+
+            <div class="chat-row assistant">
+              <div class="chat-avatar-circle">●</div>
+              <div class="assistant-msg-body">
+                <div class="thought-disclosure">
+                  <span>Thought for 2 seconds · Queried persistent memory & routine logs</span>
+                </div>
+                <p>สัปดาห์นี้ Dot ทำงานเบื้องหลังบน Cloud Computer ให้ท่านผู้บริหารไปแล้วทั้งหมด <strong>42 งาน</strong> โดยไม่ต้องรอให้ท่านเปิดแอป:</p>
+                <div class="deliverable-card">
+                  <div style="font-size:13px; color:#d1d5db; line-height:1.8;">
+                    • <strong>อีเมลที่คัดกรองแล้ว:</strong> 128 ฉบับ (เก็บเข้า Archive อัตโนมัติ 94 ฉบับ, ร่างคำตอบด่วน 8 ฉบับ)<br>
+                    • <strong>ปฏิทินที่ช่วยจัดการ:</strong> ป้องกันนัดชนประชุมบอร์ด 3 ครั้ง, ล็อกเวลา Focus Time สำเร็จ 10 ชั่วโมง<br>
+                    • <strong>สรุปข่าวเช้า 07:00 น.:</strong> ส่งตรงเข้าแอปและ iMessage ครบทุกเช้า (อ่านจบใน 3 นาที/วัน)
+                  </div>
+                  <div class="action-btn-row" style="margin-top:12px;">
+                    <button class="btn-approve-primary" onclick="selectSidebarThread('sweep')">เปิดดูงานเช้าวันนี้ (07:00 AM Sweep)</button>
+                    <button class="btn-secondary" onclick="selectSidebarThread('sla')">ดูเคสเจาะลึกสัญญา SLA</button>
+                    <button class="btn-secondary" onclick="selectSidebarThread('revenue')">ดูสรุปรายได้ไตรมาส 3</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- THREAD 1: 07:00 AM EXECUTIVE SWEEP (DEFAULT MAIN DEMO)   -->
+          <!-- ======================================================== -->
+          <div id="thread-sweep" class="thread-panel active">
+            <!-- TOP ROUTINE STATUS BANNER -->
+            <div class="routine-banner-card" id="routineBanner">
+              <div>
+                <div class="routine-banner-title" id="routineBannerTitle">
+                  <span>✓</span> Proactive 07:00 AM Routine Completed
+                </div>
+                <div class="routine-banner-desc">
+                  Dot independently checked your inbox, evaluated today's agenda, and crawled 18 strategic news sources while you were offline.
+                </div>
+              </div>
+              <button id="btnApproveAllTop" onclick="approveAllDeliverables()" style="background:#10a37f; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap;">
+                ✓ 1-Click Approve All
+              </button>
+            </div>
+
+            <!-- USER PROMPT -->
+            <div class="chat-row user">
+              <div class="user-msg-pill">
+                Check my morning emails, protect my calendar from conflicts, and summarize the latest AI & tech news.
+              </div>
+            </div>
+
+            <!-- ASSISTANT DOT RESPONSE -->
+            <div class="chat-row assistant">
+              <div class="chat-avatar-circle">●</div>
+              <div class="assistant-msg-body">
+
+                <!-- REASONING ACCORDION -->
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtStepsBox1')">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Thought for 3 seconds · Coordinated 3 specialist tools in cloud virtual sandbox</span>
+                </div>
+
+                <div class="thought-steps-box" id="thoughtStepsBox1">
+                  [07:00:01] Connected to Gmail OAuth (Read-only background mode)<br>
+                  [07:00:02] Filtered 14 unread messages → Flagged 1 VIP SLA contract deadline (Urgency: 96/100)<br>
+                  [07:00:03] Cross-checked Google Calendar → Found hard overlap at 14:00 with Q3 Board Review<br>
+                  [07:00:04] Synthesized 18 RSS & financial news feeds into 3-minute executive summary
+                </div>
+
+                <!-- TOOLS CALLED PILLS -->
+                <div class="tools-called-bar">
+                  <span class="tool-pill">🔍 Gmail: 14 unread scanned</span>
+                  <span class="tool-pill">📅 Google Calendar: Conflict detected</span>
+                  <span class="tool-pill">🌐 Proactive Web Crawl: 18 sources</span>
+                </div>
+
+                <p>
+                  อรุณสวัสดิ์ครับท่านผู้บริหาร Dot ได้ดำเนินการตามตารางรอบ <strong>07:00 AM Executive Routine</strong> ในสภาพแวดล้อม Virtual Cloud เรียบร้อยแล้ว สรุป 3 ประเด็นสำคัญที่ต้องตัดสินใจในเช้าวันนี้:
+                </p>
+
+                <!-- DELIVERABLE 1: EMAIL TRIAGE -->
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📧</span> 1. อีเมลสัญญาลูกค้า VIP เร่งด่วน
+                    </div>
+                    <span class="urgency-badge" id="emailBadgeStatus">Urgency: 96/100 · ต้องการการอนุมัติ</span>
+                  </div>
+                  <p style="font-size:12px; color:#b0b0b0; margin-bottom:8px;">
+                    <strong>ผู้ส่ง:</strong> Sarah Jenkins (Managing Director, TechCorp) · <strong>หัวข้อ:</strong> ขอแก้ SLA สัญญาข้อ 4.2 เป็น 99.9% ก่อนการประชุมบอร์ดเวลา 14:00 น.
+                  </p>
+                  
+                  <div class="draft-preview-box" id="emailDraftDisplay">เรียน คุณ Sarah
+
+ทางเราได้พิจารณาข้อตกลงและเห็นชอบในการรับประกัน SLA 99.9% ตามสัญญา โดยได้จัดเตรียมเอกสารฉบับลงนามแนบมาพร้อมนี้เพื่อให้คณะกรรมการของท่านพิจารณาลงมติก่อนเวลา 14:00 น. เรียบร้อยครับ
+
+ขอแสดงความนับถือ
+สำนักงานผู้บริหาร</div>
+
+                  <textarea id="emailDraftEditor" class="draft-textarea" style="display:none;"></textarea>
+
+                  <div class="action-btn-row">
+                    <button class="btn-approve-primary" id="btnSendEmail" onclick="approveEmail()">
+                      ✓ Approve & Send via Gmail
+                    </button>
+                    <button class="btn-secondary" id="btnEditEmail" onclick="toggleEditDraft()">
+                      Edit Draft
+                    </button>
+                    <button class="btn-secondary" onclick="selectSidebarThread('sla')">
+                      🔍 ดูที่มาของสัญญาข้อ 4.2
+                    </button>
+                  </div>
+                </div>
+
+                <!-- DELIVERABLE 2: CALENDAR GUARDIAN -->
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📅</span> 2. การจัดการปฏิทิน & ปกป้องเวลาทำงาน
+                    </div>
+                    <span id="calBadgeStatus" style="font-size:11px; font-weight:700; color:#818cf8; background:rgba(99,102,241,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(99,102,241,0.3);">
+                      Hard Conflict Resolved
+                    </span>
+                  </div>
+                  <p style="font-size:12px; color:#b0b0b0; margin-bottom:8px;">
+                    <strong>ตรวจพบนัดชน:</strong> มีคำขอนัดประชุมกลยุทธ์เวลา 14:00 น. ซ้อนทับกับ <strong>การประชุมคณะกรรมการบริหาร (Q3 Board of Directors Review 13:30 - 15:30)</strong>
+                  </p>
+                  <div class="draft-preview-box">🛡️ Dot ดำเนินการล็อกเวลาบอร์ดบริหาร และร่างข้อเสนอเลื่อนนัดหมายให้อีกฝ่ายเลือก 2 ช่วงเวลาที่ว่างจริง:
+• วันนี้เวลา 16:00 - 17:00 น. (มีเวลา Buffer พัก 30 นาที)
+• หรือวันพรุ่งนี้เวลา 10:00 - 11:00 น.</div>
+                  <div class="action-btn-row">
+                    <button class="btn-approve-primary" id="btnCalReschedule" onclick="approveCalendar()">
+                      ✓ Auto-Reschedule & Notify Organizer
+                    </button>
+                  </div>
+                </div>
+
+                <!-- DELIVERABLE 3: MORNING INTELLIGENCE -->
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📰</span> 3. สรุปข่าวกรองยุทธศาสตร์ยามเช้า (Executive TL;DR)
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(16,185,129,0.3);">
+                      3-Min Brief
+                    </span>
+                  </div>
+                  <div class="draft-preview-box" style="margin-bottom:8px;"><strong>• AI Agents:</strong> OpenAI และผู้พัฒนาชั้นนำเริ่มเปิดใช้งาน Always-on Agent สั่งงานข้ามแอปต่อเนื่อง
+<strong>• ตลาดทุน:</strong> หุ้นกลุ่มเทคโนโลยีปรับตัวขึ้น 1.4% หลังรายได้ Cloud Data Center สำหรับ AI เติบโตทำสถิติใหม่
+<strong>💡 Business Impact:</strong> ผู้บริหารที่เริ่มใช้เอเจนต์ช่วยงานแอดมินจะคืนเวลาโฟกัสกลยุทธ์ได้ทันที 20–30% ต่อสัปดาห์</div>
+                  
+                  <div class="action-btn-row">
+                    <button class="btn-secondary" onclick="toggleAudioPlayer()">
+                      🎧 ฟังเสียงบรรยาย (Audio Podcast)
+                    </button>
+                  </div>
+
+                  <!-- Simulated Audio Player -->
+                  <div class="audio-player-bar" id="audioPlayerBar">
+                    <span>🔊 กำลังเล่น: Morning Executive Briefing (00:18 / 02:45)</span>
+                    <div style="flex:1; height:4px; background:#2d4a43; border-radius:2px; overflow:hidden;">
+                      <div style="width:35%; height:100%; background:#10a37f;"></div>
+                    </div>
+                    <button onclick="toggleAudioPlayer()" style="background:transparent; border:none; color:#fff; cursor:pointer; font-size:12px;">✕ Stop</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- THREAD 2: BOARD SLA REVIEW FOLLOW-UP                     -->
+          <!-- ======================================================== -->
+          <div id="thread-sla" class="thread-panel">
+            <div class="chat-row user">
+              <div class="user-msg-pill">
+                ช่วยดึงประวัติสัญญาของ TechCorp ว่าทำไม Sarah ถึงขอแก้ SLA ข้อ 4.2 เป็น 99.9% และเช็กว่าทีม Tech ของเรารองรับได้ไหม ก่อนฉันเข้าประชุมบอร์ดบ่ายนี้
+              </div>
+            </div>
+
+            <div class="chat-row assistant">
+              <div class="chat-avatar-circle">●</div>
+              <div class="assistant-msg-body">
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtStepsBox2')">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Thought for 4 seconds · Searched Gmail threads, Google Drive contracts & Slack #infra</span>
+                </div>
+
+                <div class="thought-steps-box" id="thoughtStepsBox2">
+                  [Step 1] Searched Gmail for "TechCorp SLA 4.2" (Found 6 emails from last week)<br>
+                  [Step 2] Read Google Drive: TechCorp_Master_Agreement_v2.pdf (Clause 4.2 = 99.5% uptime)<br>
+                  [Step 3] Checked CTO's Slack note: Actual uptime over last 12 months is 99.96%
+                </div>
+
+                <div class="tools-called-bar">
+                  <span class="tool-pill">📧 Gmail: 6 threads matched</span>
+                  <span class="tool-pill">📄 Drive: TechCorp_MSA_v2.pdf</span>
+                  <span class="tool-pill">💬 Slack: CTO Uptime Report</span>
+                </div>
+
+                <p>
+                  ผมตรวจสอบเอกสารสัญญาเดิมและบันทึกจากทีมวิศวกรรมให้เรียบร้อยแล้วครับ สรุปข้อมูลสำคัญสำหรับใช้ในที่ประชุมบอร์ดเวลา 13:30 น.:
+                </p>
+
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📄</span> เปรียบเทียบข้อสัญญา SLA Clause 4.2 (TechCorp Deal — มูลค่า $1.2M/ปี)
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
+                      Low Risk · CTO Approved
+                    </span>
+                  </div>
+                  <div class="draft-preview-box">• <strong>สัญญาเดิม (Draft v2):</strong> รับประกัน Uptime ที่ 99.5%
+• <strong>สิ่งที่ลูกค้าขอแก้ (Sarah Jenkins):</strong> ปรับเพิ่มเป็น 99.9% เพื่อให้ผ่านเกณฑ์ Compliance ของบอร์ดฝั่งลูกค้า
+• <strong>ความพร้อมทางเทคนิคของเรา:</strong> ข้อมูลจาก CTO ยืนยันว่าระบบจริงของเรามี Uptime เฉลี่ย 12 เดือนย้อนหลังอยู่ที่ <strong>99.96%</strong> จึงสามารถอนุมัติ 99.9% ได้ทันทีโดยไม่มีต้นทุนเพิ่ม</div>
+                  <div class="action-btn-row">
+                    <button class="btn-approve-primary" onclick="showToast('แนบสรุป SLA เข้าในเอกสารการประชุมบอร์ด 13:30 น. เรียบร้อยแล้ว')">
+                      📌 แนบสรุปนี้เข้าวาระประชุมบอร์ด 13:30 น.
+                    </button>
+                    <button class="btn-secondary" onclick="selectSidebarThread('sweep')">
+                      ← กลับไปกดส่งอีเมลตอบ Sarah
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- THREAD 3: QUARTERLY REVENUE SUMMARY                      -->
+          <!-- ======================================================== -->
+          <div id="thread-revenue" class="thread-panel">
+            <div class="chat-row user">
+              <div class="user-msg-pill">
+                สรุปตัวเลขรายได้ Q3 เทียบกับข่าวตลาดเช้านี้ และช่วยเช็กปฏิทินว่าพรุ่งนี้มีคิวว่างคุยกับ CFO สัก 30 นาทีไหม
+              </div>
+            </div>
+
+            <div class="chat-row assistant">
+              <div class="chat-avatar-circle">●</div>
+              <div class="assistant-msg-body">
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtStepsBox3')">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Thought for 5 seconds · Analyzed Q3_ARR_Report.xlsx, Market News & CFO Calendar</span>
+                </div>
+
+                <div class="thought-steps-box" id="thoughtStepsBox3">
+                  [Step 1] Extracted KPIs from Google Sheets: Q3_Executive_Financials<br>
+                  [Step 2] Benchmarked against morning sector news (+14% industry average)<br>
+                  [Step 3] Checked Calendar availability for CEO + CFO tomorrow morning
+                </div>
+
+                <div class="tools-called-bar">
+                  <span class="tool-pill">📊 Sheets: Q3_ARR_Report.xlsx</span>
+                  <span class="tool-pill">📰 News: Sector Benchmark</span>
+                  <span class="tool-pill">📅 Calendar: CEO + CFO Sync</span>
+                </div>
+
+                <p>
+                  นี่คือบทสรุปผลประกอบการไตรมาส 3 เทียบกับภาพรวมตลาดเช้านี้ พร้อมตารางนัดหมาย CFO ครับ:
+                </p>
+
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📈</span> 1. สรุปรายได้ Q3 เทียบข่าวคู่แข่งในอุตสาหกรรม
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
+                      Outperforming (+24% YoY)
+                    </span>
+                  </div>
+                  <div class="draft-preview-box">• <strong>รายได้รวม Q3 (ARR):</strong> เติบโต <strong>+24.2% YoY</strong> (สูงกว่าค่าเฉลี่ยกลุ่มอุตสาหกรรมในข่าวเช้านี้ที่โต +14.0%)
+• <strong>Net Retention Rate:</strong> 118% จากกลุ่มลูกค้าองค์กรที่ต่อสัญญาเพิ่ม
+• <strong>ประเด็นข่าวสำคัญ:</strong> ตลาดกำลังให้ความสำคัญกับเรื่อง AI Automation ซึ่งสอดคล้องกับแผนลดต้นทุน Q4 ของเราพอดี</div>
+                </div>
+
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📅</span> 2. ตารางเวลาว่างตรงกันกับ CFO (วันพรุ่งนี้)
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#818cf8; background:rgba(99,102,241,0.15); padding:2px 8px; border-radius:10px;">
+                      Slot Available
+                    </span>
+                  </div>
+                  <div class="draft-preview-box">ตรวจพบช่วงเวลาที่ทั้งท่านและ CFO ว่างตรงกันในวันพรุ่งนี้:
+• <strong>เวลา 10:30 – 11:00 น.</strong> (หลังช่วง Focus Time ของท่าน และก่อนประชุมช่วงบ่าย)</div>
+                  <div class="action-btn-row">
+                    <button class="btn-approve-primary" id="btnBookCfo" onclick="bookCfoMeeting()">
+                      ✓ จองคิวนัด CFO พรุ่งนี้ 10:30 น. ทันที
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- THREAD 4: + NEW TASK / CHAT                              -->
+          <!-- ======================================================== -->
+          <div id="thread-new" class="thread-panel">
+            <div style="text-align:center; padding: 36px 20px 16px;">
+              <div style="width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg, #ab68ff, #6830d9); display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; margin:0 auto 14px; box-shadow:0 8px 24px rgba(171,104,255,0.35);">●</div>
+              <h2 style="font-size:20px; font-weight:700; color:#fff; margin-bottom:6px;">สั่งงานหรือตั้ง Routine ใหม่ให้ Dot</h2>
+              <p style="font-size:13px; color:#9e9e9e; max-width:520px; margin:0 auto;">
+                มอบหมายงานให้ Dot ดูแลต่อเนื่องเบื้องหลัง ไม่ว่าจะเป็นการเฝ้าอีเมลสำคัญ จัดตารางปฏิทิน หรือสรุปข่าวทุกเช้า
+              </p>
+            </div>
+
+            <div class="hub-grid">
+              <div class="hub-stat-card" onclick="simulateNewPrompt('ช่วยเช็กอีเมลที่ยังไม่ได้อ่านตอนนี้ ถ้ามีเรื่องด่วนช่วยร่างคำตอบให้ด้วย')">
+                <div style="font-size:18px; margin-bottom:6px;">📧</div>
+                <div style="font-weight:700; color:#fff; font-size:13px; margin-bottom:4px;">สั่งสแกนอีเมลด่วนทันที</div>
+                <div style="font-size:12px; color:#8e8e8e;">"ช่วยเช็กอีเมลที่ยังไม่ได้อ่านตอนนี้ ถ้ามีเรื่องด่วนช่วยร่างคำตอบให้ด้วย"</div>
+              </div>
+
+              <div class="hub-stat-card" onclick="simulateNewPrompt('เช็กตารางประชุมสัปดาห์นี้ มีนัดไหนชนกันหรือต้องเลื่อนไหม')">
+                <div style="font-size:18px; margin-bottom:6px;">📅</div>
+                <div style="font-weight:700; color:#fff; font-size:13px; margin-bottom:4px;">ตรวจสอบปฏิทินสัปดาห์นี้</div>
+                <div style="font-size:12px; color:#8e8e8e;">"เช็กตารางประชุมสัปดาห์นี้ มีนัดไหนชนกันหรือต้องเลื่อนไหม"</div>
+              </div>
+
+              <div class="hub-stat-card" onclick="simulateNewPrompt('ตั้ง Routine สรุปข่าว AI และเศรษฐกิจส่งให้ฉันทุกเช้าตอน 7 โมง')">
+                <div style="font-size:18px; margin-bottom:6px;">📰</div>
+                <div style="font-weight:700; color:#fff; font-size:13px; margin-bottom:4px;">ตั้งเวลาสรุปข่าวทุกเช้า</div>
+                <div style="font-size:12px; color:#8e8e8e;">"ตั้ง Routine สรุปข่าว AI และเศรษฐกิจส่งให้ฉันทุกเช้าตอน 7 โมง"</div>
+              </div>
+            </div>
+
+            <div id="newChatDynamicMessages" style="display:flex; flex-direction:column; gap:16px; margin-top:10px;"></div>
+          </div>
+
+        </div>
+
+        <!-- CHATGPT AUTHENTIC INPUT BAR -->
+        <div class="dot-input-container">
+          <!-- Quick action chips -->
+          <div class="suggestion-pills">
+            <div class="s-pill" onclick="approveAllDeliverables()">⚡ Approve all actions</div>
+            <div class="s-pill" onclick="selectSidebarThread('sla')">📄 ดูการวิเคราะห์สัญญา SLA</div>
+            <div class="s-pill" onclick="selectSidebarThread('revenue')">📊 ดูสรุปรายได้ Q3 & นัด CFO</div>
+            <div class="s-pill" onclick="toggleAudioPlayer()">🎧 ฟังเสียงสรุปข่าวเช้า</div>
+          </div>
+
+          <div class="input-box-wrapper">
+            <span style="font-size:18px; color:#999; cursor:pointer;" title="Attach file">+</span>
+            <input type="text" id="dotChatInput" class="chatgpt-input-field" placeholder="Message Dot (e.g. 'Approve Sarah's email and clear my afternoon schedule')..." onkeypress="handleInputKey(event)">
+            <button class="send-arrow-btn" onclick="sendDotMessage()">↑</button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- 2. iPHONE / iMESSAGE VIEW (FOR USERS TEXTING THEIR DOT) -->
+    <div id="viewPhoneContainer" class="imessage-modal-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:0 12px 10px; color:#fff; font-size:12px; font-weight:600;">
+        <span>07:02</span>
+        <div style="width:80px; height:20px; background:#111; border-radius:16px;"></div>
+        <span>5G 􀛨 100%</span>
+      </div>
+
+      <!-- Contact Header -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px 12px; border-bottom:1px solid #333; margin-bottom:12px;">
+        <span style="color:#007aff; font-size:13px; cursor:pointer;" onclick="switchMainView('app')">‹ ChatGPT App</span>
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, #ab68ff, #7928ca); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; font-weight:bold;">●</div>
+          <div style="font-size:13px; font-weight:700; color:#fff; margin-top:2px;">Dot (AI Chief of Staff)</div>
+        </div>
+        <span style="color:#007aff; font-size:18px;">ℹ</span>
+      </div>
+
+      <!-- Messages -->
+      <div style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:13px; padding:0 4px;" id="phoneMessages">
+        <div style="text-align:center; font-size:10px; color:#777; margin:6px 0;">Today 07:00 AM · Proactive iMessage from Dot</div>
+        
+        <div style="background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start; line-height:1.5;">
+          อรุณสวัสดิ์ครับท่านผู้บริหาร ☀️ Dot รันรอบ 07:00 AM เรียบร้อยแล้ว:<br><br>
+          📧 <strong>อีเมลด่วน:</strong> Sarah (TechCorp) ขออนุมัติ SLA 99.9% ก่อน 14:00 น. (ร่างคำตอบพร้อมส่ง)<br><br>
+          📅 <strong>ปฏิทิน:</strong> นัด 14:00 ชนกับ Board Review ร่างเลื่อนไป 16:00 ให้อีกฝ่ายแล้ว<br><br>
+          📰 <strong>ข่าวสาร:</strong> ข่าว AI & หุ้นเทคฯ บวก 1.4% สรุปพร้อมอ่านใน 3 นาที
+        </div>
+
+        <div style="background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start;">
+          ต้องการอนุมัติส่งอีเมลและยืนยันเลื่อนนัดเลยไหมครับ?
+          <div style="margin-top:8px;">
+            <button onclick="phoneApprove()" style="background:#10a37f; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">
+              ✓ Approve ทั้งหมดใน 1 คลิก
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div style="display:flex; align-items:center; gap:8px; padding-top:10px; border-top:1px solid #333;">
+        <input type="text" id="phoneInput" placeholder="Text Dot via iMessage..." style="flex:1; background:#1c1c1e; border:1px solid #38383a; border-radius:20px; padding:8px 14px; color:#fff; font-size:12px; outline:none;" onkeypress="handlePhoneKey(event)">
+        <button onclick="sendPhoneText()" style="width:28px; height:28px; border-radius:50%; background:#007aff; border:none; color:#fff; font-weight:bold; cursor:pointer;">↑</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastBox" class="toast-box">
+    <span style="color:#34d399; font-weight:bold;">✓</span>
+    <span id="toastText">Action completed</span>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">⚙️ Dot Agent Configuration</h3>
+        <button onclick="toggleSettingsModal()" style="background:transparent; border:none; color:#999; cursor:pointer; font-size:16px;">✕</button>
+      </div>
+      <div style="font-size:13px; color:#ccc; display:flex; flex-direction:column; gap:12px;">
+        <div style="background:#1c1c1c; padding:12px; border-radius:10px; border:1px solid #333;">
+          <strong style="color:#fff;">🟢 Unified Primary Dot (Single Point of Contact)</strong>
+          <p style="font-size:12px; color:#999; margin-top:2px;">ตามโครงสร้างจริงของ OpenAI ผู้บริหารสั่งงานผ่าน Primary Dot เพียงตัวเดียว แล้ว Dot จะทำหน้าที่กระจายงาน (Email, Calendar, News) บน Cloud VM โดยอัตโนมัติ</p>
+        </div>
+        <div style="background:#1c1c1c; padding:12px; border-radius:10px; border:1px solid #333;">
+          <strong style="color:#fff;">🔒 Safety & Read-Only Guardrails</strong>
+          <p style="font-size:12px; color:#999; margin-top:2px;">Background proactive research is strictly read-only. External actions (sending emails, modifying calendar) require 1-Click Executive Approval.</p>
+        </div>
+        <div style="background:#1c1c1c; padding:12px; border-radius:10px; border:1px solid #333;">
+          <strong style="color:#fff;">📱 Connected Channels</strong>
+          <p style="font-size:12px; color:#999; margin-top:2px;">• Gmail & Google Calendar (Personal OAuth)<br>• Apple iMessage / Android RCS Direct Texting</p>
+        </div>
+      </div>
+      <div style="margin-top:16px; text-align:right;">
+        <button onclick="toggleSettingsModal()" class="btn-approve-primary" style="display:inline-flex;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeThreadId = 'sweep';
+
+    function selectSidebarThread(threadKey) {
+      activeThreadId = threadKey;
+
+      // Clear active states in sidebar
+      document.getElementById('navDotHub').classList.remove('active');
+      document.getElementById('navSweep').classList.remove('active');
+      document.getElementById('navSla').classList.remove('active');
+      document.getElementById('navRevenue').classList.remove('active');
+
+      // Highlight selected sidebar item
+      if (threadKey === 'hub') document.getElementById('navDotHub').classList.add('active');
+      if (threadKey === 'sweep') document.getElementById('navSweep').classList.add('active');
+      if (threadKey === 'sla') document.getElementById('navSla').classList.add('active');
+      if (threadKey === 'revenue') document.getElementById('navRevenue').classList.add('active');
+
+      // Hide all thread panels
+      const panels = document.querySelectorAll('.thread-panel');
+      panels.forEach(p => p.classList.remove('active'));
+
+      // Show selected panel
+      const targetPanel = document.getElementById(`thread-${threadKey}`);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+
+      // Scroll to top of stream
+      document.getElementById('dotStream').scrollTop = 0;
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toastBox');
+      const txt = document.getElementById('toastText');
+      txt.innerText = msg;
+      box.classList.add('show');
+      setTimeout(() => {
+        box.classList.remove('show');
+      }, 3000);
+    }
+
+    function switchMainView(mode) {
+      const btnApp = document.getElementById('btnAppMode');
+      const btnPhone = document.getElementById('btnPhoneMode');
+      const appView = document.getElementById('viewAppContainer');
+      const phoneView = document.getElementById('viewPhoneContainer');
+
+      if (mode === 'app') {
+        btnApp.classList.add('active');
+        btnPhone.classList.remove('active');
+        appView.style.display = 'grid';
+        phoneView.style.display = 'none';
+      } else {
+        btnPhone.classList.add('active');
+        btnApp.classList.remove('active');
+        appView.style.display = 'none';
+        phoneView.style.display = 'flex';
+      }
+    }
+
+    function toggleThoughtDetails(boxId) {
+      const box = document.getElementById(boxId);
+      if (box) {
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+
+    function toggleEditDraft() {
+      const display = document.getElementById('emailDraftDisplay');
+      const editor = document.getElementById('emailDraftEditor');
+      const btn = document.getElementById('btnEditEmail');
+
+      if (editor.style.display === 'none') {
+        editor.value = display.innerText;
+        display.style.display = 'none';
+        editor.style.display = 'block';
+        btn.innerText = 'Save Draft';
+        editor.focus();
+      } else {
+        display.innerText = editor.value;
+        editor.style.display = 'none';
+        display.style.display = 'block';
+        btn.innerText = 'Edit Draft';
+        showToast('บันทึกร่างอีเมลที่แก้ไขเรียบร้อยแล้ว');
+      }
+    }
+
+    function approveEmail() {
+      const editor = document.getElementById('emailDraftEditor');
+      if (editor.style.display === 'block') {
+        toggleEditDraft();
+      }
+      const btn = document.getElementById('btnSendEmail');
+      const badge = document.getElementById('emailBadgeStatus');
+      btn.innerText = '✓ Sent via Gmail API';
+      btn.style.background = '#3b4252';
+      btn.disabled = true;
+      badge.innerText = 'Dispatched ✓';
+      badge.style.background = 'rgba(16, 185, 129, 0.2)';
+      badge.style.color = '#34d399';
+      badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+      showToast('อนุมัติและส่งอีเมลตอบรับ SLA 99.9% ถึง Sarah Jenkins เรียบร้อยแล้ว');
+    }
+
+    function approveCalendar() {
+      const btn = document.getElementById('btnCalReschedule');
+      const badge = document.getElementById('calBadgeStatus');
+      btn.innerText = '✓ Rescheduled to 16:00 & Notified';
+      btn.style.background = '#3b4252';
+      btn.disabled = true;
+      badge.innerText = 'Calendar Synced ✓';
+      showToast('อัปเดตตารางเวลา Google Calendar และส่งอีเมลแจ้งผู้จัดประชุมเรียบร้อยแล้ว');
+    }
+
+    function bookCfoMeeting() {
+      const btn = document.getElementById('btnBookCfo');
+      btn.innerText = '✓ จองคิวพรุ่งนี้ 10:30 น. เรียบร้อยแล้ว';
+      btn.style.background = '#3b4252';
+      btn.disabled = true;
+      showToast('ส่งคำเชิญประชุมไปยังปฏิทินของ CFO พรุ่งนี้เวลา 10:30 น. เรียบร้อยแล้ว');
+    }
+
+    function approveAllDeliverables() {
+      selectSidebarThread('sweep');
+      approveEmail();
+      approveCalendar();
+      const topBtn = document.getElementById('btnApproveAllTop');
+      topBtn.innerText = '✓ All Approved';
+      topBtn.style.background = '#3b4252';
+      showToast('อนุมัติรายการงานรอบ 07:00 AM ทั้งหมดเรียบร้อยแล้ว!');
+    }
+
+    function toggleAudioPlayer() {
+      selectSidebarThread('sweep');
+      const bar = document.getElementById('audioPlayerBar');
+      if (bar.style.display === 'flex') {
+        bar.style.display = 'none';
+      } else {
+        bar.style.display = 'flex';
+        showToast('กำลังเล่นเสียงสรุปข่าวยามเช้า (Audio Briefing)...');
+      }
+    }
+
+    function runSweepAgain() {
+      selectSidebarThread('sweep');
+      const title = document.getElementById('routineBannerTitle');
+      title.innerHTML = '<span>🔄</span> Running Cloud Sandbox Sweep...';
+      showToast('กำลังสแกน Gmail, Google Calendar และแหล่งข่าวใหม่...');
+      setTimeout(() => {
+        title.innerHTML = '<span>✓</span> Proactive 07:00 AM Routine Completed (Just Synced)';
+        showToast('ซิงค์ข้อมูลล่าสุดจาก Cloud Computer เรียบร้อยแล้ว');
+      }, 1200);
+    }
+
+    function toggleSettingsModal() {
+      document.getElementById('settingsModal').classList.toggle('open');
+    }
+
+    function simulateNewPrompt(promptText) {
+      const input = document.getElementById('dotChatInput');
+      input.value = promptText;
+      sendDotMessage();
+    }
+
+    function handleInputKey(e) {
+      if (e.key === 'Enter') {
+        sendDotMessage();
+      }
+    }
+
+    function sendDotMessage() {
+      const input = document.getElementById('dotChatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const activePanel = document.getElementById(`thread-${activeThreadId}`);
+      const stream = document.getElementById('dotStream');
+
+      const userRow = document.createElement('div');
+      userRow.className = 'chat-row user';
+      userRow.innerHTML = `<div class="user-msg-pill">${text}</div>`;
+      activePanel.appendChild(userRow);
+      input.value = '';
+      stream.scrollTop = stream.scrollHeight;
+
+      setTimeout(() => {
+        const dotRow = document.createElement('div');
+        dotRow.className = 'chat-row assistant';
+        
+        let responseContent = `รับทราบครับ: "${text}" Dot ได้บันทึกคำสั่งและประสานงานผ่าน Cloud Sandbox (Gmail / Calendar / Web) เรียบร้อยแล้วครับ`;
+        if (text.toLowerCase().includes('approve') || text.toLowerCase().includes('อนุมัติ') || text.toLowerCase().includes('ส่ง')) {
+          responseContent = `✓ ดำเนินการอนุมัติส่งอีเมลถึง Sarah และอัปเดตตารางนัดหมาย 16:00 น. เรียบร้อยแล้วครับ!`;
+          approveEmail();
+          approveCalendar();
+        } else if (text.includes('Routine') || text.includes('7 โมง')) {
+          responseContent = `✓ ตั้งค่า Recurring Routine เรียบร้อยครับ! Dot จะตื่นขึ้นมาสแกนอีเมล ตรวจปฏิทิน และสรุปข่าวส่งให้ท่านทุกวันเวลา 07:00 น. อัตโนมัติครับ`;
+        }
+
+        dotRow.innerHTML = `
+          <div class="chat-avatar-circle">●</div>
+          <div class="assistant-msg-body">
+            <div class="thought-disclosure">
+              <span>Thought for 2 seconds · Executed in cloud virtual environment</span>
+            </div>
+            <p>${responseContent}</p>
+          </div>
+        `;
+        activePanel.appendChild(dotRow);
+        stream.scrollTop = stream.scrollHeight;
+      }, 600);
+    }
+
+    function handlePhoneKey(e) {
+      if (e.key === 'Enter') sendPhoneText();
+    }
+
+    function sendPhoneText() {
+      const input = document.getElementById('phoneInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const container = document.getElementById('phoneMessages');
+      const userBubble = document.createElement('div');
+      userBubble.style.cssText = "background:#007aff; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-end;";
+      userBubble.innerText = text;
+      container.appendChild(userBubble);
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+
+      setTimeout(() => {
+        const dotBubble = document.createElement('div');
+        dotBubble.style.cssText = "background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start;";
+        dotBubble.innerText = "✓ รับทราบครับ Dot ดำเนินการให้เรียบร้อยแล้วครับ!";
+        container.appendChild(dotBubble);
+        container.scrollTop = container.scrollHeight;
+      }, 500);
+    }
+
+    function phoneApprove() {
+      const container = document.getElementById('phoneMessages');
+      const userBubble = document.createElement('div');
+      userBubble.style.cssText = "background:#007aff; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-end;";
+      userBubble.innerText = "✓ Approve ทั้งหมด";
+      container.appendChild(userBubble);
+
+      setTimeout(() => {
+        const dotBubble = document.createElement('div');
+        dotBubble.style.cssText = "background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start;";
+        dotBubble.innerHTML = "✓ ส่งอีเมลตอบ Sarah และยืนยันเลื่อนนัดหมายไป 16:00 เรียบร้อยแล้วครับ 🚀";
+        container.appendChild(dotBubble);
+        container.scrollTop = container.scrollHeight;
+        approveAllDeliverables();
+      }, 500);
+    }
+  </script>
+
+</body>
+</html>
