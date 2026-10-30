@@ -1322,26 +1322,31 @@ User</div>
           </div>
 
           <!-- ======================================================== -->
-          <!-- THREAD 3: MORNING NEWS BRIEF (CUSTOMIZABLE TOPICS / TBC) -->
+          <!-- THREAD 3: MORNING NEWS BRIEF (PODCAST + PDF SUMMARY)     -->
           <!-- ======================================================== -->
           <div id="thread-news" class="thread-panel">
             <div class="routine-banner-card">
               <div>
                 <div class="routine-banner-title">
-                  <span>📰</span> Task 3 · 07:00 AM Morning News Briefing (Topics Customizable)
+                  <span>📰</span> Task 3 · 07:00 AM Morning News Brief (Podcast + PDF Summary)
                 </div>
                 <div class="routine-banner-desc">
-                  Synthesized from 22 global sources into a 3-minute briefing. Click any topic tag below to switch or customize the news focus.
+                  Dot crawled 22 global sources, generated a 2:45 min AI Podcast, and compiled a 1-page PDF Executive Summary of the episode.
                 </div>
               </div>
-              <button onclick="toggleAudioPlayer()" class="btn-approve-primary" style="white-space:nowrap;">
-                🎧 Play Audio Brief
-              </button>
+              <div style="display:flex; gap:8px;">
+                <button onclick="toggleAudioPlayer()" class="btn-approve-primary" style="white-space:nowrap;">
+                  🎧 Play Podcast
+                </button>
+                <button onclick="openPdfModal()" class="btn-secondary" style="white-space:nowrap; background:#262626; color:#fff;">
+                  📄 Open PDF
+                </button>
+              </div>
             </div>
 
             <div class="chat-row user">
               <div class="user-msg-pill">
-                Summarize the latest news every morning at 07:00 AM based on my chosen topics so I can catch up in 3 minutes.
+                Summarize the latest news every morning at 07:00 AM as an audio podcast, and also generate a PDF document that summarizes the podcast so I can skim or share it.
               </div>
             </div>
 
@@ -1350,13 +1355,20 @@ User</div>
               <div class="assistant-msg-body">
                 <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtNews')">
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                  <span>Thought for 4 seconds · Crawled 22 news sources & filtered by User's active topic preferences</span>
+                  <span>Thought for 4 seconds · Crawled 22 sources, synthesized 2:45m Podcast & rendered 1-page PDF Summary</span>
                 </div>
 
                 <div class="thought-steps-box" id="thoughtNews">
                   [07:00:01] Loaded User Topic Preferences (Customizable / TBC)<br>
                   [07:00:02] Crawled Reuters, Bloomberg, TechCrunch, Financial Times & industry feeds<br>
-                  [07:00:04] Distilled key executive takeaways & generated 2m 45s audio podcast
+                  [07:00:03] Synthesized 2m 45s Morning Executive Podcast (Voice: Studio Host)<br>
+                  [07:00:04] Rendered structured PDF document summarizing all 3 podcast chapters (Morning_Podcast_Summary.pdf)
+                </div>
+
+                <div class="tools-called-bar">
+                  <span class="tool-pill">🌐 Web Crawl: 22 sources</span>
+                  <span class="tool-pill">🎙️ Podcast Studio: 2m 45s audio</span>
+                  <span class="tool-pill">📄 PDF Generator: Morning_Podcast_Summary.pdf</span>
                 </div>
 
                 <!-- CUSTOMIZABLE TOPIC SELECTOR (TOPIC TBC) -->
@@ -1368,41 +1380,105 @@ User</div>
                   <span class="topic-tag" style="border-style:dashed; background:transparent;" onclick="promptCustomTopic()">+ กำหนดหัวข้อเอง (Topic TBC)</span>
                 </div>
 
-                <div class="deliverable-card">
+                <!-- DELIVERABLE 1: AI MORNING PODCAST PLAYER -->
+                <div class="deliverable-card" style="background:linear-gradient(135deg, #1d2825, #222226); border-color:#26594a;">
                   <div class="deliverable-header">
-                    <div class="deliverable-title" id="newsCardTitle">
-                      <span>🌅</span> สรุปข่าวเช้าประจำวัน (07:00 AM Executive TL;DR — อ่านจบใน 3 นาที)
+                    <div class="deliverable-title">
+                      <span>🎙️</span> 1. Morning Executive Podcast (เสียงบรรยายสรุปข่าวเช้า 2:45 นาที)
                     </div>
                     <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
-                      Updated 07:00 AM
+                      AI Studio Voice · Ready
                     </span>
                   </div>
 
-                  <div class="draft-preview-box" id="newsBriefContent"><strong>1. 🤖 AI & Autonomous Agents:</strong>
-OpenAI และผู้พัฒนาชั้นนำเริ่มขยายการใช้งาน Always-on Cloud Agents ที่สามารถแยก Thread ทำงานเบื้องหลัง (ตรวจอีเมล จัดตารางนัด และค้นคว้าข้อมูล) ได้เองโดยไม่ต้องรอคำสั่งทีละบรรทัด
+                  <!-- Built-in Interactive Podcast Player -->
+                  <div style="background:#151c1a; border:1px solid #2b5447; border-radius:10px; padding:12px 14px; margin-bottom:10px;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                      <button id="podcastPlayBtn" onclick="toggleAudioPlayer()" style="width:38px; height:38px; border-radius:50%; background:#10a37f; border:none; color:#fff; font-size:14px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        ▶
+                      </button>
+                      <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#e2e8f0; font-weight:600; margin-bottom:6px;">
+                          <span id="podcastTrackLabel">Episode: 07:00 AM Daily Executive Briefing</span>
+                          <span id="podcastTimeLabel" style="font-family:var(--font-mono); color:#6ee7b7;">00:00 / 02:45</span>
+                        </div>
+                        <div style="height:6px; background:#263c35; border-radius:3px; overflow:hidden; cursor:pointer;" onclick="jumpPodcastChapter('01:15', '50%')">
+                          <div id="podcastProgressFill" style="width:18%; height:100%; background:linear-gradient(90deg, #10a37f, #34d399); transition:width 0.3s;"></div>
+                        </div>
+                      </div>
+                      <button id="podcastSpeedBtn" onclick="cyclePodcastSpeed()" style="background:#22352f; border:1px solid #355e50; color:#a7f3d0; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">
+                        1.0x
+                      </button>
+                    </div>
 
-<strong>2. 📈 ตลาดทุนและเศรษฐกิจดิจิทัล:</strong>
+                    <!-- Chapter Timestamps -->
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); font-size:11px;">
+                      <span style="color:#9ca3af;">Chapters:</span>
+                      <span onclick="jumpPodcastChapter('00:00', '8%')" style="color:#6ee7b7; cursor:pointer; text-decoration:underline;">00:00 AI Agents</span>
+                      <span onclick="jumpPodcastChapter('00:55', '42%')" style="color:#6ee7b7; cursor:pointer; text-decoration:underline;">00:55 Cloud & Markets</span>
+                      <span onclick="jumpPodcastChapter('01:50', '75%')" style="color:#6ee7b7; cursor:pointer; text-decoration:underline;">01:50 Key Takeaways</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DELIVERABLE 2: PDF SUMMARY OF THE PODCAST -->
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title" id="newsCardTitle">
+                      <span>📄</span> 2. เอกสาร PDF สรุปเนื้อหาจาก Podcast (PDF Executive Summary)
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#f87171; background:rgba(239,68,68,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(239,68,68,0.3);">
+                      PDF · 1 Page
+                    </span>
+                  </div>
+
+                  <!-- Authentic PDF Attachment Chip -->
+                  <div style="display:flex; align-items:center; justify-content:space-between; background:#1c1c1e; border:1px solid #3a3a3e; border-radius:10px; padding:10px 14px; margin-bottom:12px;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                      <div style="width:36px; height:36px; border-radius:8px; background:#dc2626; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; letter-spacing:0.5px;">
+                        PDF
+                      </div>
+                      <div>
+                        <div style="font-size:13px; font-weight:600; color:#fff;" id="pdfFileName">Morning_Podcast_Summary_Oct30.pdf</div>
+                        <div style="font-size:11px; color:#9ca3af;">Summarized from 07:00 AM Audio Podcast · 142 KB · Ready for Board / Team</div>
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                      <button class="btn-secondary" style="padding:5px 10px; font-size:11px;" onclick="openPdfModal()">
+                        👁️ เปิดอ่าน PDF
+                      </button>
+                      <button class="btn-approve-primary" style="padding:5px 12px; font-size:11px;" onclick="downloadPodcastPdf()">
+                        ⬇️ Download PDF
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Inline PDF Page Preview -->
+                  <div class="draft-preview-box" id="newsBriefContent" style="background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; padding:16px; border-radius:8px;">
+                    <div style="border-bottom:2px solid #0f172a; padding-bottom:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                      <strong style="font-size:13px; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">📄 EXECUTIVE PODCAST SUMMARY — DAILY BRIEFING</strong>
+                      <span style="font-size:11px; color:#475569;">07:00 AM · Duration: 2:45 mins</span>
+                    </div>
+                    <div id="pdfSummaryBodyText" style="font-size:12.5px; color:#1e293b; line-height:1.65;"><strong>• Chapter 1 (00:00) — AI & Autonomous Agents:</strong>
+OpenAI และผู้พัฒนาชั้นนำเริ่มขยายการใช้งาน Always-on Cloud Agents ที่สามารถแยก Thread ทำงานเบื้องหลัง (ตรวจอีเมล จัดตารางนัด และสรุปข่าว) ได้เองโดยไม่ต้องรอคำสั่งทีละบรรทัด
+
+<strong>• Chapter 2 (00:55) — ตลาดทุนและเศรษฐกิจดิจิทัล:</strong>
 ดัชนีกลุ่มเทคโนโลยีและ Cloud Infrastructure ปรับตัวบวก +1.6% ในช่วงเช้า หลังองค์กรขนาดใหญ่เร่งลงทุนระบบอัตโนมัติสำหรับผู้บริหารเพื่อลดภาระงานรูทีน
 
-<strong>3. 💡 ผลกระทบและข้อเสนอแนะสำหรับคุณ:</strong>
+<strong>• Chapter 3 (01:50) — สรุปข้อเสนอแนะจาก Podcast สำหรับคุณ:</strong>
 คู่แข่งในอุตสาหกรรมเริ่มนำ AI Assistant มาช่วยคัดกรองข้อมูลก่อนเข้าประชุมบอร์ด ทำให้ตัดสินใจได้เร็วขึ้น 30% แนะนำให้นำแนวทางนี้เข้าที่ประชุมกลยุทธ์สัปดาห์นี้ครับ</div>
+                  </div>
 
                   <div class="action-btn-row">
-                    <button class="btn-approve-primary" onclick="toggleAudioPlayer()">
-                      🎧 ฟังสรุปข่าวด้วยเสียง (2:45 นาที)
+                    <button class="btn-approve-primary" onclick="openPdfModal()">
+                      👁️ ดูไฟล์ PDF แบบเต็มหน้ากระดาษ
+                    </button>
+                    <button class="btn-secondary" onclick="downloadPodcastPdf()">
+                      ⬇️ ดาวน์โหลด / พิมพ์สรุป PDF
                     </button>
                     <button class="btn-secondary" onclick="promptCustomTopic()">
                       ⚙️ เปลี่ยนหัวข้อข่าวพรุ่งนี้ (Topic TBC)
                     </button>
-                  </div>
-
-                  <!-- Simulated Audio Player -->
-                  <div class="audio-player-bar" id="audioPlayerBar">
-                    <span>🔊 กำลังเล่น: 07:00 AM Morning News Briefing (00:24 / 02:45)</span>
-                    <div style="flex:1; height:4px; background:#2d4a43; border-radius:2px; overflow:hidden;">
-                      <div style="width:40%; height:100%; background:#10a37f;"></div>
-                    </div>
-                    <button onclick="toggleAudioPlayer()" style="background:transparent; border:none; color:#fff; cursor:pointer; font-size:12px;">✕ Stop</button>
                   </div>
                 </div>
               </div>
@@ -1618,6 +1694,54 @@ User</div>
     </div>
   </div>
 
+  <!-- FULL-PAGE PDF DOCUMENT PREVIEW MODAL -->
+  <div id="pdfPreviewModal" class="modal-backdrop">
+    <div style="background:#1e1e20; border:1px solid #3c3c3c; border-radius:16px; width:740px; max-width:94%; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
+      <!-- PDF Toolbar -->
+      <div style="background:#141416; padding:12px 20px; border-bottom:1px solid #2e2e32; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="background:#dc2626; color:#fff; font-size:10px; font-weight:800; padding:3px 7px; border-radius:5px;">PDF</span>
+          <span style="color:#fff; font-size:13.5px; font-weight:600;" id="modalPdfTitle">Morning_Podcast_Summary_Oct30.pdf</span>
+          <span style="color:#888; font-size:12px;">· Page 1 of 1</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button onclick="downloadPodcastPdf()" class="btn-approve-primary" style="padding:5px 12px; font-size:12px;">
+            ⬇️ Download / Print PDF
+          </button>
+          <button onclick="closePdfModal()" style="background:#2c2c30; border:none; color:#ddd; width:28px; height:28px; border-radius:6px; cursor:pointer; font-size:14px;">✕</button>
+        </div>
+      </div>
+
+      <!-- PDF A4 Paper Canvas -->
+      <div style="padding:24px; overflow-y:auto; background:#2a2a2e; flex:1;">
+        <div style="background:#ffffff; color:#0f172a; border-radius:8px; padding:32px 36px; max-width:650px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4); font-family:'Inter', 'IBM Plex Sans Thai', sans-serif;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:14px; margin-bottom:18px;">
+            <div>
+              <div style="font-size:10px; font-weight:800; color:#7928ca; text-transform:uppercase; letter-spacing:1px;">CHATGPT DOT · AUTO-GENERATED PODCAST BRIEF</div>
+              <h2 style="font-size:18px; font-weight:800; color:#0f172a; margin-top:4px;">Morning Executive Podcast — PDF Summary</h2>
+            </div>
+            <div style="text-align:right; font-size:11px; color:#475569;">
+              <div><strong>Date:</strong> Today, 07:00 AM</div>
+              <div><strong>Podcast Length:</strong> 02:45 mins</div>
+              <div><strong>Prepared for:</strong> User</div>
+            </div>
+          </div>
+
+          <div style="background:#f1f5f9; border-left:4px solid #7928ca; padding:10px 14px; border-radius:4px; font-size:12px; color:#334155; margin-bottom:16px;">
+            <strong>🎧 Podcast Episode Synopsis:</strong> เอกสารฉบับนี้สรุปเนื้อหาสำคัญจากพอดแคสต์ข่าวเช้ารอบ 07:00 น. ที่ Dot สังเคราะห์จากแหล่งข่าวทั่วโลก 22 แห่ง เพื่อให้คุณอ่านทบทวนหรือส่งต่อให้ทีมบริหารได้ภายใน 1 หน้า
+          </div>
+
+          <div id="modalPdfBodyContent" style="font-size:13px; color:#1e293b; line-height:1.75; white-space:pre-line;"></div>
+
+          <div style="margin-top:22px; padding-top:12px; border-top:1px solid #cbd5e1; display:flex; justify-content:space-between; font-size:11px; color:#64748b;">
+            <span>Generated automatically by ChatGPT Dot (Cloud Sandbox)</span>
+            <span>Confidential · Executive Briefing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     let activeThreadId = 'email';
 
@@ -1760,59 +1884,189 @@ User</div>
       showToast(`อัปเดต Google Calendar ไปยังเวลา ${slotLabel} และแจ้งผู้จัดแล้ว`);
     }
 
-    // NEWS THREAD FUNCTIONS
+    // NEWS THREAD FUNCTIONS (PODCAST + PDF SUMMARY)
+    let isPodcastPlaying = false;
+    let podcastSpeeds = ['1.0x', '1.25x', '1.5x', '2.0x'];
+    let speedIndex = 0;
+
     function switchNewsTopic(topicKey) {
-      const contentBox = document.getElementById('newsBriefContent');
+      const contentBox = document.getElementById('pdfSummaryBodyText');
       const titleBox = document.getElementById('newsCardTitle');
+      const pdfFile = document.getElementById('pdfFileName');
+      const trackLabel = document.getElementById('podcastTrackLabel');
+
       if (topicKey === 'ai') {
-        titleBox.innerHTML = '<span>🤖</span> สรุปข่าวเช้าหมวด: AI & Autonomous Technology (3-Min Brief)';
-        contentBox.innerHTML = `<strong>1. Always-On AI Agents:</strong>
+        titleBox.innerHTML = '<span>📄</span> 2. เอกสาร PDF สรุปจาก Podcast หมวด: AI & Autonomous Tech';
+        if (pdfFile) pdfFile.innerText = 'Morning_Podcast_Summary_AI_Tech.pdf';
+        if (trackLabel) trackLabel.innerText = 'Episode: AI & Autonomous Technology Brief';
+        contentBox.innerHTML = `<strong>• Chapter 1 (00:00) — Always-On AI Agents:</strong>
 OpenAI เปิดตัวฟีเจอร์แยกรันงานเบื้องหลังเป็นแต่ละ Thread (Email, Calendar, News) ทำให้ผู้บริหารไม่ต้องคอยพิมพ์ถามซ้ำทุกเช้า
 
-<strong>2. Enterprise Adoption:</strong>
-ผลสำรวจล่าสุดชี้ว่าผู้บริหารที่ใช้ AI คัดกรองอีเมลและเตรียมข้อมูลประชุมสามารถลดเวลาทำงานแอดมินลงได้เฉลี่ย 1.5 ชั่วโมงต่อวัน`;
+<strong>• Chapter 2 (00:55) — Enterprise Productivity Impact:</strong>
+ผลสำรวจล่าสุดชี้ว่าผู้บริหารที่ใช้ AI คัดกรองอีเมลและเตรียมข้อมูลประชุมสามารถลดเวลาทำงานแอดมินลงได้เฉลี่ย 1.5 ชั่วโมงต่อวัน
+
+<strong>• Chapter 3 (01:50) — สรุปข้อเสนอแนะจาก Podcast:</strong>
+สามารถนำรูปแบบ Automation นี้ไปปรับใช้กับทีมบริหารเพื่อลดเวลาประชุมสถานะงานรายวันได้ทันที`;
       } else if (topicKey === 'market') {
-        titleBox.innerHTML = '<span>📈</span> สรุปข่าวเช้าหมวด: Global Markets & Macroeconomy (3-Min Brief)';
-        contentBox.innerHTML = `<strong>1. ตลาดหุ้นสหรัฐฯ และเอเชีย:</strong>
+        titleBox.innerHTML = '<span>📄</span> 2. เอกสาร PDF สรุปจาก Podcast หมวด: Global Markets & Economy';
+        if (pdfFile) pdfFile.innerText = 'Morning_Podcast_Summary_Markets.pdf';
+        if (trackLabel) trackLabel.innerText = 'Episode: Global Markets & Macroeconomy Brief';
+        contentBox.innerHTML = `<strong>• Chapter 1 (00:00) — ตลาดหุ้นสหรัฐฯ และเอเชีย:</strong>
 ดัชนี S&P 500 และกลุ่มเทคโนโลยีปรับตัวขึ้น +1.4% จากผลประกอบการกลุ่ม Cloud และซอฟต์แวร์องค์กรที่เติบโตเกินคาด
 
-<strong>2. ทิศทางดอกเบี้ยและค่าเงิน:</strong>
-นักวิเคราะห์คาดการณ์อัตราดอกเบี้ยนโยบายทรงตัวในไตรมาสนี้ ส่งผลบวกต่อแผนการขยายการลงทุนของภาคธุรกิจ`;
+<strong>• Chapter 2 (00:55) — ทิศทางดอกเบี้ยและค่าเงิน:</strong>
+นักวิเคราะห์คาดการณ์อัตราดอกเบี้ยนโยบายทรงตัวในไตรมาสนี้ ส่งผลบวกต่อแผนการขยายการลงทุนของภาคธุรกิจ
+
+<strong>• Chapter 3 (01:50) — สรุปข้อเสนอแนะจาก Podcast:</strong>
+เป็นจังหวะที่เหมาะสมในการล็อกสัญญาบริการ Cloud และโครงสร้างพื้นฐานระยะยาว`;
       } else if (topicKey === 'competitor') {
-        titleBox.innerHTML = '<span>🏢</span> สรุปข่าวเช้าหมวด: Industry & Competitor Moves (3-Min Brief)';
-        contentBox.innerHTML = `<strong>1. ความเคลื่อนไหวคู่แข่งในตลาด:</strong>
+        titleBox.innerHTML = '<span>📄</span> 2. เอกสาร PDF สรุปจาก Podcast หมวด: Industry & Competitors';
+        if (pdfFile) pdfFile.innerText = 'Morning_Podcast_Summary_Competitors.pdf';
+        if (trackLabel) trackLabel.innerText = 'Episode: Industry & Competitor Intelligence';
+        contentBox.innerHTML = `<strong>• Chapter 1 (00:00) — ความเคลื่อนไหวคู่แข่งในตลาด:</strong>
 บริษัทชั้นนำในอุตสาหกรรมประกาศจับมือพันธมิตรด้าน Cloud AI เพื่อยกระดับ SLA การให้บริการลูกค้าองค์กรเป็น 99.9%
 
-<strong>2. โอกาสทางธุรกิจ:</strong>
-ลูกค้าองค์กรให้ความสำคัญกับความเร็วในการตอบสนองสัญญา (Turnaround Time) ซึ่งเป็นจุดแข็งที่เราสามารถใช้ปิดดีลไตรมาสนี้ได้ทันที`;
+<strong>• Chapter 2 (00:55) — โอกาสทางธุรกิจและการแข่งขัน:</strong>
+ลูกค้าองค์กรให้ความสำคัญกับความเร็วในการตอบสนองสัญญา (Turnaround Time) ซึ่งเป็นจุดแข็งของเรา
+
+<strong>• Chapter 3 (01:50) — สรุปข้อเสนอแนะจาก Podcast:</strong>
+ใช้จุดแข็งด้าน Uptime 99.96% ของเราในการปิดดีลลูกค้าองค์กรขนาดใหญ่ในไตรมาสนี้`;
       }
-      showToast('อัปเดตสรุปข่าวตามหัวข้อที่เลือกเรียบร้อยแล้ว');
+      showToast('อัปเดตทั้งเสียง Podcast และเอกสารสรุป PDF ตามหัวข้อที่เลือกแล้ว');
     }
 
     function promptCustomTopic() {
-      const custom = prompt('ระบุหัวข้อข่าวที่คุณต้องการให้ Dot สรุปทุกเช้า (เช่น FinTech, Real Estate, Healthcare, Crypto):', 'FinTech & Banking Innovation');
+      const custom = prompt('ระบุหัวข้อข่าวที่คุณต้องการให้ Dot จัดทำ Podcast และสรุปเป็น PDF ทุกเช้า (เช่น FinTech, Real Estate, Healthcare):', 'FinTech & Banking Innovation');
       if (custom && custom.trim()) {
+        const cleanTopic = custom.trim();
         const titleBox = document.getElementById('newsCardTitle');
-        const contentBox = document.getElementById('newsBriefContent');
-        titleBox.innerHTML = `<span>🎯</span> สรุปข่าวเช้าหมวดที่คุณกำหนดเอง: ${custom.trim()} (3-Min Brief)`;
-        contentBox.innerHTML = `<strong>1. อัปเดตล่าสุดด้าน ${custom.trim()}:</strong>
-Dot ตั้งค่าแหล่งข่าวสำหรับหมวด "${custom.trim()}" เรียบร้อยแล้ว และได้ดึงเทรนด์สำคัญของเช้านี้มาสรุปให้คุณอ่านจบใน 3 นาที
+        const contentBox = document.getElementById('pdfSummaryBodyText');
+        const pdfFile = document.getElementById('pdfFileName');
+        const trackLabel = document.getElementById('podcastTrackLabel');
 
-<strong>2. ประเด็นเชิงกลยุทธ์ที่ต้องจับตา:</strong>
-ผู้เล่นรายใหญ่กำลังเร่งปรับตัวด้านกฎระเบียบและเทคโนโลยีอัตโนมัติ แนะนำให้ติดตามความเคลื่อนไหวต่อเนื่องในรอบ 07:00 น. พรุ่งนี้ครับ`;
-        showToast(`บันทึกหัวข้อข่าว "${custom.trim()}" สำหรับสรุปทุกเช้าเวลา 07:00 น. แล้ว`);
+        titleBox.innerHTML = `<span>📄</span> 2. เอกสาร PDF สรุปจาก Podcast หมวด: ${cleanTopic}`;
+        if (pdfFile) pdfFile.innerText = `Podcast_Summary_${cleanTopic.replace(/\s+/g, '_')}.pdf`;
+        if (trackLabel) trackLabel.innerText = `Episode: ${cleanTopic} Morning Brief`;
+        contentBox.innerHTML = `<strong>• Chapter 1 (00:00) — อัปเดตล่าสุดด้าน ${cleanTopic}:</strong>
+Dot ตั้งค่าแหล่งข่าวสำหรับหมวด "${cleanTopic}" เรียบร้อยแล้ว และได้สังเคราะห์เสียงบรรยาย Podcast พร้อมสรุปลงเอกสาร PDF ฉบับนี้
+
+<strong>• Chapter 2 (00:55) — แนวโน้มตลาดและเทคโนโลยี:</strong>
+ผู้เล่นรายใหญ่กำลังเร่งปรับตัวด้านกฎระเบียบและระบบอัตโนมัติเพื่อเพิ่มความเร็วในการให้บริการลูกค้า
+
+<strong>• Chapter 3 (01:50) — สรุปข้อเสนอแนะจาก Podcast สำหรับคุณ:</strong>
+ติดตามความเคลื่อนไหวต่อเนื่องในรอบ 07:00 น. พรุ่งนี้ พร้อมไฟล์ PDF สรุปอัตโนมัติ`;
+        showToast(`บันทึกหัวข้อ "${cleanTopic}" สำหรับทำ Podcast และ PDF สรุปทุกเช้าแล้ว`);
       }
     }
 
     function toggleAudioPlayer() {
       selectSidebarThread('news');
-      const bar = document.getElementById('audioPlayerBar');
-      if (bar.style.display === 'flex') {
-        bar.style.display = 'none';
+      const playBtn = document.getElementById('podcastPlayBtn');
+      const timeLabel = document.getElementById('podcastTimeLabel');
+      const fill = document.getElementById('podcastProgressFill');
+
+      isPodcastPlaying = !isPodcastPlaying;
+      if (isPodcastPlaying) {
+        if (playBtn) playBtn.innerText = '⏸';
+        if (timeLabel) timeLabel.innerText = '00:42 / 02:45 (Playing)';
+        if (fill) fill.style.width = '45%';
+        showToast('🎙️ กำลังเล่นเสียง Morning Executive Podcast...');
       } else {
-        bar.style.display = 'flex';
-        showToast('กำลังเล่นเสียงสรุปข่าวเช้า (Audio Briefing)...');
+        if (playBtn) playBtn.innerText = '▶';
+        if (timeLabel) timeLabel.innerText = '00:42 / 02:45 (Paused)';
+        showToast('⏸ หยุดเล่นเสียง Podcast ชั่วคราว');
       }
+    }
+
+    function jumpPodcastChapter(timeStr, widthPct) {
+      const playBtn = document.getElementById('podcastPlayBtn');
+      const timeLabel = document.getElementById('podcastTimeLabel');
+      const fill = document.getElementById('podcastProgressFill');
+      isPodcastPlaying = true;
+      if (playBtn) playBtn.innerText = '⏸';
+      if (timeLabel) timeLabel.innerText = `${timeStr} / 02:45 (Playing)`;
+      if (fill) fill.style.width = widthPct;
+      showToast(`🎙️ ข้ามไปยังช่วงเวลา ${timeStr} ของ Podcast`);
+    }
+
+    function cyclePodcastSpeed() {
+      speedIndex = (speedIndex + 1) % podcastSpeeds.length;
+      const btn = document.getElementById('podcastSpeedBtn');
+      if (btn) btn.innerText = podcastSpeeds[speedIndex];
+      showToast(`ปรับความเร็วเสียง Podcast เป็น ${podcastSpeeds[speedIndex]}`);
+    }
+
+    function openPdfModal() {
+      const bodySource = document.getElementById('pdfSummaryBodyText');
+      const modalBody = document.getElementById('modalPdfBodyContent');
+      const pdfFile = document.getElementById('pdfFileName');
+      const modalTitle = document.getElementById('modalPdfTitle');
+
+      if (bodySource && modalBody) {
+        modalBody.innerHTML = bodySource.innerHTML;
+      }
+      if (pdfFile && modalTitle) {
+        modalTitle.innerText = pdfFile.innerText;
+      }
+      document.getElementById('pdfPreviewModal').classList.add('open');
+    }
+
+    function closePdfModal() {
+      document.getElementById('pdfPreviewModal').classList.remove('open');
+    }
+
+    function downloadPodcastPdf() {
+      const bodySource = document.getElementById('pdfSummaryBodyText');
+      const pdfFile = document.getElementById('pdfFileName');
+      const fileName = pdfFile ? pdfFile.innerText : 'Morning_Podcast_Summary.pdf';
+      const htmlContent = bodySource ? bodySource.innerHTML : '';
+
+      const printWin = window.open('', '_blank', 'width=800,height=900');
+      if (printWin) {
+        printWin.document.write(`
+          <!DOCTYPE html>
+          <html lang="th">
+          <head>
+            <meta charset="UTF-8">
+            <title>${fileName}</title>
+            <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+            <style>
+              body { font-family: 'Inter', 'IBM Plex Sans Thai', sans-serif; padding: 40px; color: #0f172a; line-height: 1.75; max-width: 720px; margin: 0 auto; }
+              .header { border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+              .badge { font-size: 11px; font-weight: 700; color: #7928ca; text-transform: uppercase; letter-spacing: 1px; }
+              h1 { font-size: 20px; margin: 4px 0 0; }
+              .synopsis { background: #f1f5f9; border-left: 4px solid #7928ca; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+              .content { font-size: 14px; white-space: pre-line; }
+              .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #cbd5e1; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div>
+                <div class="badge">CHATGPT DOT · EXECUTIVE PODCAST SUMMARY</div>
+                <h1>${fileName}</h1>
+              </div>
+              <div style="text-align:right; font-size:12px; color:#475569;">
+                <div>Date: Today, 07:00 AM</div>
+                <div>Podcast Duration: 02:45 mins</div>
+                <div>Prepared for: User</div>
+              </div>
+            </div>
+            <div class="synopsis">
+              <strong>🎧 สรุปเนื้อหาจาก Morning Executive Podcast:</strong> เอกสาร PDF ฉบับนี้สร้างขึ้นอัตโนมัติโดย ChatGPT Dot เพื่อสรุปประเด็นสำคัญจากเสียงพอดแคสต์รอบ 07:00 น.
+            </div>
+            <div class="content">${htmlContent}</div>
+            <div class="footer">
+              <span>Generated automatically by ChatGPT Dot</span>
+              <span>Page 1 of 1</span>
+            </div>
+            <script>setTimeout(() => { window.print(); }, 400);<\/script>
+          </body>
+          </html>
+        `);
+        printWin.document.close();
+      }
+      showToast(`กำลังเปิดหน้าบันทึกไฟล์ PDF (${fileName})...`);
     }
 
     // EMERGENCY THREAD FUNCTIONS
