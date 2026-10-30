@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChatGPT Dot — Executive Chief of Staff Demo</title>
+  <title>ChatGPT Dot — AI Assistant Demo</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -140,7 +140,7 @@
       border: 1px solid var(--chatgpt-border);
       border-radius: 16px;
       display: grid;
-      grid-template-columns: 268px 1fr;
+      grid-template-columns: 276px 1fr;
       height: 100%;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
       overflow: hidden;
@@ -156,7 +156,7 @@
       }
     }
 
-    /* LEFT SIDEBAR (AUTHENTIC CHATGPT) */
+    /* LEFT SIDEBAR (AUTHENTIC CHATGPT DOTS) */
     .chatgpt-sidebar {
       background: var(--chatgpt-sidebar);
       border-right: 1px solid var(--chatgpt-border);
@@ -171,7 +171,7 @@
     .sidebar-top {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     .new-chat-btn {
@@ -262,11 +262,11 @@
     .sidebar-history-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .sidebar-history-item {
-      padding: 9px 12px;
+      padding: 9px 10px;
       border-radius: 8px;
       font-size: 13px;
       color: #b4b4b4;
@@ -279,6 +279,7 @@
       align-items: center;
       justify-content: space-between;
       border: 1px solid transparent;
+      gap: 6px;
     }
 
     .sidebar-history-item:hover {
@@ -288,15 +289,40 @@
 
     .sidebar-history-item.active {
       background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.14);
       color: #fff;
       font-weight: 600;
+    }
+
+    .sidebar-history-item.emergency-item {
+      border-color: rgba(244, 63, 94, 0.35);
+      background: rgba(244, 63, 94, 0.08);
+      color: #fda4af;
+    }
+
+    .sidebar-history-item.emergency-item:hover,
+    .sidebar-history-item.emergency-item.active {
+      background: rgba(244, 63, 94, 0.18);
+      border-color: rgba(244, 63, 94, 0.6);
+      color: #fff;
     }
 
     .history-dot-tag {
       font-size: 10px;
       color: #888;
-      margin-left: 6px;
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
+    }
+
+    .history-urgent-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      background: #e11d48;
+      padding: 1px 6px;
+      border-radius: 8px;
       flex-shrink: 0;
     }
 
@@ -474,6 +500,11 @@
       flex-shrink: 0;
     }
 
+    .routine-banner-card.emergency-banner {
+      background: linear-gradient(135deg, #35161e, #241418);
+      border: 1px solid #e11d48;
+    }
+
     .routine-banner-title {
       font-size: 13px;
       font-weight: 700;
@@ -606,6 +637,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .deliverable-title {
@@ -717,7 +750,7 @@
     /* DOT HUB OVERVIEW GRID (WHEN CLICKING DOT PROFILE IN SIDEBAR) */
     .hub-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
       margin-top: 6px;
     }
@@ -740,6 +773,23 @@
     .hub-stat-card:hover {
       border-color: #ab68ff;
       transform: translateY(-2px);
+    }
+
+    /* TOPIC TAG PILLS IN NEWS THREAD */
+    .topic-tag {
+      background: rgba(171, 104, 255, 0.12);
+      border: 1px solid rgba(171, 104, 255, 0.35);
+      color: #e9d5ff;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .topic-tag:hover {
+      background: rgba(171, 104, 255, 0.25);
     }
 
     /* AUTHENTIC CHATGPT INPUT BAR */
@@ -920,47 +970,51 @@
       <aside class="chatgpt-sidebar">
         <div class="sidebar-top">
           <button class="new-chat-btn" onclick="selectSidebarThread('new')">
-            <span>+ New task / chat</span>
+            <span>+ New chat</span>
             <span style="font-size:11px; opacity:0.6;">⌘K</span>
           </button>
 
           <!-- YOUR PRIMARY DOT (SINGLE UNIFIED AGENT AS IN REAL CHATGPT DOTS) -->
-          <div class="sidebar-section-title">Your Primary Dot</div>
+          <div class="sidebar-section-title">Your Dots</div>
           <div class="sidebar-dots-list">
             <div id="navDotHub" class="dot-sidebar-item" onclick="selectSidebarThread('hub')">
               <div class="dot-icon-glyph">●</div>
               <div>
                 <div>Dot · Chief of Staff</div>
-                <div style="font-size:11px; color:#10a37f;">Active on Cloud · 3 Routines</div>
+                <div style="font-size:11px; color:#10a37f;">Active on Cloud</div>
               </div>
               <div class="pulse-live" title="Always-on background execution"></div>
             </div>
           </div>
 
-          <!-- RECENT CHAT HISTORY (ALL CLICKABLE WITH FULL SAMPLE CHATS) -->
+          <!-- RECENT HISTORY (SEPARATE CLOUD THREADS SPUN UP BY DOT FOR EACH TASK) -->
           <div class="sidebar-section-title" style="margin-top:10px;">Recent History</div>
           <div class="sidebar-history-list">
-            <div id="navSweep" class="sidebar-history-item active" onclick="selectSidebarThread('sweep')">
-              <span>07:00 AM Executive Sweep</span>
+            <div id="navEmail" class="sidebar-history-item active" onclick="selectSidebarThread('email')">
+              <span>📧 Email Triage & Drafts</span>
               <span class="history-dot-tag">07:00</span>
             </div>
-            <div id="navSla" class="sidebar-history-item" onclick="selectSidebarThread('sla')">
-              <span>Board SLA Review Follow-up</span>
-              <span class="history-dot-tag">Yesterday</span>
+            <div id="navCalendar" class="sidebar-history-item" onclick="selectSidebarThread('calendar')">
+              <span>📅 Check Calendar</span>
+              <span class="history-dot-tag">07:00</span>
             </div>
-            <div id="navRevenue" class="sidebar-history-item" onclick="selectSidebarThread('revenue')">
-              <span>Quarterly Revenue Summary</span>
-              <span class="history-dot-tag">Oct 28</span>
+            <div id="navNews" class="sidebar-history-item" onclick="selectSidebarThread('news')">
+              <span>📰 Morning News Brief</span>
+              <span class="history-dot-tag">07:00</span>
+            </div>
+            <div id="navEmergency" class="sidebar-history-item emergency-item" onclick="selectSidebarThread('emergency')">
+              <span>🚨 Emergency: SLA Crisis</span>
+              <span class="history-urgent-tag" id="sidebarUrgentBadge">Action</span>
             </div>
           </div>
         </div>
 
         <!-- USER PROFILE FOOTER -->
         <div class="user-profile-tile" onclick="toggleSettingsModal()">
-          <div class="user-avatar">C</div>
+          <div class="user-avatar">U</div>
           <div>
-            <div class="user-meta-name">CEO / Managing Director</div>
-            <div class="user-meta-tier">ChatGPT Pro · Primary Dot Active</div>
+            <div class="user-meta-name">User</div>
+            <div class="user-meta-tier">ChatGPT Pro · Dot Active</div>
           </div>
         </div>
       </aside>
@@ -974,19 +1028,19 @@
             <div class="dot-hero-avatar">●</div>
             <div class="dot-header-text">
               <h3>
-                Dot · Executive Chief of Staff
+                <span id="headerThreadTitle">Dot · Email Triage & Auto-Drafting</span>
                 <span class="dot-cloud-indicator">
                   <span style="width:6px; height:6px; background:#10a37f; border-radius:50%;"></span>
-                  Always-on Agent (GPT-6 Astra)
+                  Always-on Cloud Thread
                 </span>
               </h3>
-              <p id="headerSubText">Dedicated Cloud Computer · Sub-Agents: Email Triage, Calendar Guardian, News Brief</p>
+              <p id="headerSubText">Dedicated Cloud Computer · Connected to Gmail, Google Calendar & Live Web</p>
             </div>
           </div>
 
           <div class="dot-actions-cluster">
             <button class="btn-dot-action" onclick="runSweepAgain()">
-              <span>⚡ Re-run Routine</span>
+              <span>⚡ Sync Cloud Thread</span>
             </button>
             <button class="btn-dot-action" onclick="toggleSettingsModal()">
               <span>⚙️ Settings</span>
@@ -998,75 +1052,176 @@
         <div class="dot-chat-stream" id="dotStream">
 
           <!-- ======================================================== -->
-          <!-- THREAD 0: DOT · CHIEF OF STAFF (AGENT HUB & ROUTINES)    -->
+          <!-- THREAD 0: DOT · CHIEF OF STAFF (AGENT HUB OVERVIEW)      -->
           <!-- ======================================================== -->
           <div id="thread-hub" class="thread-panel">
             <div class="routine-banner-card" style="background:linear-gradient(135deg, #241934, #18242c); border-color:#583585;">
               <div>
                 <div class="routine-banner-title" style="color:#d8b4fe;">
-                  <span>🟣</span> Dot · Chief of Staff — Active Responsibilities & Background Sub-Agents
+                  <span>🟣</span> Dot · Chief of Staff — Cloud Thread Orchestrator
                 </div>
                 <div class="routine-banner-desc" style="color:#cbd5e1;">
-                  ใน ChatGPT Dot ผู้บริหารมี Primary Dot เพียงตัวเดียวที่คอยแตกงาน (Orchestrate) ให้ 3 ทักษะย่อยทำงานเบื้องหลังบน Cloud VM ตลอด 24 ชม.
+                  ในแอป ChatGPT Dot ของจริง เมื่อ Dot ทำงานเบื้องหลังแต่ละหมวดหมู่ มันจะแยกสร้าง Cloud Thread ของแต่ละเรื่องไว้ใน Recent History เพื่อให้คุณกดเข้าไปตรวจและสั่งการแยกตามเรื่องได้ทันที
                 </div>
               </div>
-              <button onclick="selectSidebarThread('sweep')" class="btn-approve-primary" style="background:#ab68ff; white-space:nowrap;">
-                ดูผลรัน 07:00 AM ล่าสุด →
-              </button>
             </div>
 
             <div class="hub-grid">
-              <div class="hub-stat-card" onclick="selectSidebarThread('sweep')">
+              <div class="hub-stat-card" onclick="selectSidebarThread('email')">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                   <span style="font-size:20px;">📧</span>
-                  <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">Active · Every 30m</span>
+                  <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">2 Drafts Ready</span>
                 </div>
-                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">1. Email Triage & Draft</h4>
-                <p style="font-size:12px; color:#9e9e9e;">สแกนอีเมลใหม่ คัดแยกความเร่งด่วน (0–100) และร่างคำตอบอิงสัญญาเดิมรอให้กด Approve</p>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">1. Handling Email Thread</h4>
+                <p style="font-size:12px; color:#9e9e9e;">อ่านอีเมลใหม่ คัดกรองเฉพาะเรื่องที่ต้องได้รับความสนใจ และร่างคำตอบรอให้กด Approve</p>
               </div>
 
-              <div class="hub-stat-card" onclick="selectSidebarThread('sweep')">
+              <div class="hub-stat-card" onclick="selectSidebarThread('calendar')">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                   <span style="font-size:20px;">📅</span>
-                  <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">Active · Real-time</span>
+                  <span style="font-size:11px; color:#818cf8; background:rgba(99,102,241,0.15); padding:2px 8px; border-radius:10px;">1 Conflict Found</span>
                 </div>
-                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">2. Calendar Guardian</h4>
-                <p style="font-size:12px; color:#9e9e9e;">ปกป้องเวลาประชุมบอร์ดและช่วง Deep Work พร้อมเสนอเวลาเลื่อนนัดให้อัตโนมัติเมื่อเกิดนัดชน</p>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">2. Check Calendar Thread</h4>
+                <p style="font-size:12px; color:#9e9e9e;">ตรวจสอบตารางนัดหมายวันนี้ ป้องกันเวลานัดชน และเสนอเวลาเลื่อนนัดให้อัตโนมัติ</p>
               </div>
 
-              <div class="hub-stat-card" onclick="selectSidebarThread('sweep')">
+              <div class="hub-stat-card" onclick="selectSidebarThread('news')">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                   <span style="font-size:20px;">📰</span>
                   <span style="font-size:11px; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">Daily · 07:00 AM</span>
                 </div>
-                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">3. Morning News Brief</h4>
-                <p style="font-size:12px; color:#9e9e9e;">กวาดข่าว AI, ตลาดทุน และคู่แข่ง สรุปเป็น Executive TL;DR 3 นาที พร้อมโหมดฟังเสียง</p>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">3. Morning News Brief Thread</h4>
+                <p style="font-size:12px; color:#9e9e9e;">สรุปข่าวเช้าทุกวันเวลา 07:00 น. ตามหัวข้อที่เลือกได้ (Topic TBC) พร้อมโหมดฟังเสียง</p>
               </div>
+
+              <div class="hub-stat-card" style="border-color:rgba(244,63,94,0.5); background:#2d1920;" onclick="selectSidebarThread('emergency')">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="font-size:20px;">🚨</span>
+                  <span style="font-size:11px; color:#fff; background:#e11d48; padding:2px 8px; border-radius:10px; font-weight:700;">Needs Response</span>
+                </div>
+                <h4 style="color:#fff; font-size:14px; margin-bottom:4px;">4. Emergency Situation Alert</h4>
+                <p style="font-size:12px; color:#fda4af;">แชทแจ้งเตือนเหตุฉุกเฉินเร่งด่วนที่ Dot ดึงข้อมูลมาวิเคราะห์ให้แล้ว แต่ต้องรอให้ User ตัดสินใจ</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- THREAD 1: HANDLING EMAIL (READ, TRIAGE & DRAFT RESPONSE) -->
+          <!-- ======================================================== -->
+          <div id="thread-email" class="thread-panel active">
+            <div class="routine-banner-card" id="emailRoutineBanner">
+              <div>
+                <div class="routine-banner-title">
+                  <span>✓</span> Task 1 · Proactive Inbox Triage Completed (07:00 AM)
+                </div>
+                <div class="routine-banner-desc">
+                  Dot read 16 incoming emails while you were offline: 14 low-priority newsletters were auto-archived, and 2 important emails have responses drafted for your review.
+                </div>
+              </div>
+              <button onclick="approveAllEmails()" class="btn-approve-primary" style="white-space:nowrap;">
+                ✓ Approve Both Drafts
+              </button>
             </div>
 
             <div class="chat-row user">
               <div class="user-msg-pill">
-                ขอดูสถานะภาพรวมของงานที่ตั้ง Routine ไว้ทั้งหมดในสัปดาห์นี้หน่อย
+                Check my incoming emails every morning, decide which ones actually need my attention, and draft a response if needed.
               </div>
             </div>
 
             <div class="chat-row assistant">
               <div class="chat-avatar-circle">●</div>
               <div class="assistant-msg-body">
-                <div class="thought-disclosure">
-                  <span>Thought for 2 seconds · Queried persistent memory & routine logs</span>
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtEmail')">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Thought for 3 seconds · Read 16 unread emails, evaluated urgency & drafted 2 replies</span>
                 </div>
-                <p>สัปดาห์นี้ Dot ทำงานเบื้องหลังบน Cloud Computer ให้ท่านผู้บริหารไปแล้วทั้งหมด <strong>42 งาน</strong> โดยไม่ต้องรอให้ท่านเปิดแอป:</p>
+
+                <div class="thought-steps-box" id="thoughtEmail">
+                  [07:00:02] Connected to Gmail OAuth (Read & Draft scope)<br>
+                  [07:00:03] Evaluated 16 unread messages using Executive Priority Filter<br>
+                  [07:00:04] Auto-archived 14 promotional/FYI emails · Flagged 2 VIP threads requiring response<br>
+                  [07:00:05] Generated context-aware reply drafts matching User's writing tone
+                </div>
+
+                <div class="tools-called-bar">
+                  <span class="tool-pill">🔍 Gmail API: 16 unread read</span>
+                  <span class="tool-pill">🧠 Triage Filter: 2 need attention</span>
+                  <span class="tool-pill">✍️ Draft Composer: 2 drafts ready</span>
+                </div>
+
+                <p>
+                  เช้านี้ผมสแกนอีเมลทั้งหมด <strong>16 ฉบับ</strong> เรียบร้อยแล้วครับ มีเพียง <strong>2 ฉบับที่ต้องการความสนใจจากคุณ</strong> (ส่วนอีก 14 ฉบับเป็นจดหมายข่าวและแจ้งเตือนทั่วไป ผมจัดเก็บเข้า Archive ให้แล้วครับ):
+                </p>
+
+                <!-- EMAIL 1 -->
                 <div class="deliverable-card">
-                  <div style="font-size:13px; color:#d1d5db; line-height:1.8;">
-                    • <strong>อีเมลที่คัดกรองแล้ว:</strong> 128 ฉบับ (เก็บเข้า Archive อัตโนมัติ 94 ฉบับ, ร่างคำตอบด่วน 8 ฉบับ)<br>
-                    • <strong>ปฏิทินที่ช่วยจัดการ:</strong> ป้องกันนัดชนประชุมบอร์ด 3 ครั้ง, ล็อกเวลา Focus Time สำเร็จ 10 ชั่วโมง<br>
-                    • <strong>สรุปข่าวเช้า 07:00 น.:</strong> ส่งตรงเข้าแอปและ iMessage ครบทุกเช้า (อ่านจบใน 3 นาที/วัน)
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📧</span> 1. ยืนยันข้อตกลงความร่วมมือไตรมาสหน้า (Q4 Partnership Term Sheet)
+                    </div>
+                    <span class="urgency-badge" id="emailBadge1">Needs Attention · Score 92/100</span>
                   </div>
-                  <div class="action-btn-row" style="margin-top:12px;">
-                    <button class="btn-approve-primary" onclick="selectSidebarThread('sweep')">เปิดดูงานเช้าวันนี้ (07:00 AM Sweep)</button>
-                    <button class="btn-secondary" onclick="selectSidebarThread('sla')">ดูเคสเจาะลึกสัญญา SLA</button>
-                    <button class="btn-secondary" onclick="selectSidebarThread('revenue')">ดูสรุปรายได้ไตรมาส 3</button>
+                  <p style="font-size:12px; color:#b0b0b0; margin-bottom:8px;">
+                    <strong>จาก:</strong> David Chen (Managing Partner, Apex Ventures) · <strong>ทำไมต้องสนใจ:</strong> ลูกค้ารอคำยืนยันเพื่อล็อกงบประมาณภายในวันนี้
+                  </p>
+                  
+                  <div class="draft-preview-box" id="emailDraftDisplay1">เรียน คุณ David
+
+ขอบคุณสำหรับเอกสารสรุปข้อตกลงครับ ผมได้ตรวจสอบเงื่อนไขเบื้องต้นเรียบร้อยแล้วและเห็นชอบตามกรอบความร่วมมือที่เสนอมา โดยให้ทีมกฎหมายช่วยตรวจรายละเอียดขั้นสุดท้ายเพื่อเดินหน้าต่อในสัปดาห์นี้ครับ
+
+ขอแสดงความนับถือ
+User</div>
+
+                  <textarea id="emailDraftEditor1" class="draft-textarea" style="display:none;"></textarea>
+
+                  <div class="action-btn-row">
+                    <button class="btn-approve-primary" id="btnSendEmail1" onclick="approveSingleEmail(1, 'David Chen')">
+                      ✓ Approve & Send Reply
+                    </button>
+                    <button class="btn-secondary" id="btnEditEmail1" onclick="toggleEditEmailDraft(1)">
+                      ✏️ Edit Draft
+                    </button>
+                  </div>
+                </div>
+
+                <!-- EMAIL 2 -->
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title">
+                      <span>📧</span> 2. ขออนุมัติงบประมาณทีมพัฒนา AI Product สำหรับเดือนหน้า
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#fbbf24; background:rgba(245,158,11,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.35);" id="emailBadge2">
+                      Needs Attention · Score 84/100
+                    </span>
+                  </div>
+                  <p style="font-size:12px; color:#b0b0b0; margin-bottom:8px;">
+                    <strong>จาก:</strong> Elena Rostova (VP of Product) · <strong>ทำไมต้องสนใจ:</strong> อยู่ในกรอบงบประมาณที่เคยคุยไว้แล้ว แค่รอคำอนุมัติสั้นๆ เพื่อเริ่มงาน
+                  </p>
+                  
+                  <div class="draft-preview-box" id="emailDraftDisplay2">สวัสดีครับ Elena
+
+อนุมัติงบประมาณตามแผนที่เสนอมาได้เลยครับ รบกวนอัปเดตความคืบหน้าเฟสแรกในการประชุมสัปดาห์หน้าด้วยนะครับ
+
+ขอบคุณครับ
+User</div>
+
+                  <textarea id="emailDraftEditor2" class="draft-textarea" style="display:none;"></textarea>
+
+                  <div class="action-btn-row">
+                    <button class="btn-approve-primary" id="btnSendEmail2" onclick="approveSingleEmail(2, 'Elena Rostova')">
+                      ✓ Approve & Send Reply
+                    </button>
+                    <button class="btn-secondary" id="btnEditEmail2" onclick="toggleEditEmailDraft(2)">
+                      ✏️ Edit Draft
+                    </button>
+                  </div>
+                </div>
+
+                <!-- FILTERED NOISE SUMMARY -->
+                <div class="deliverable-card" style="background:#1e1e1e; border-style:dashed;">
+                  <div style="font-size:12.5px; color:#9e9e9e;">
+                    🧹 <strong>อีเมลอีก 14 ฉบับที่ไม่ต้องรบกวนเวลาของคุณ:</strong> จดหมายข่าวการตลาด 11 ฉบับ (เก็บเข้า Archive), ใบแจ้งหนี้ทั่วไป 3 ฉบับ (Dot ส่งต่อให้ฝ่ายบัญชีตรวจสอบอัตโนมัติแล้ว)
                   </div>
                 </div>
               </div>
@@ -1074,203 +1229,263 @@
           </div>
 
           <!-- ======================================================== -->
-          <!-- THREAD 1: 07:00 AM EXECUTIVE SWEEP (DEFAULT MAIN DEMO)   -->
+          <!-- THREAD 2: CHECK CALENDAR (CONFLICTS & SCHEDULE GUARD)    -->
           <!-- ======================================================== -->
-          <div id="thread-sweep" class="thread-panel active">
-            <!-- TOP ROUTINE STATUS BANNER -->
-            <div class="routine-banner-card" id="routineBanner">
+          <div id="thread-calendar" class="thread-panel">
+            <div class="routine-banner-card">
               <div>
-                <div class="routine-banner-title" id="routineBannerTitle">
-                  <span>✓</span> Proactive 07:00 AM Routine Completed
+                <div class="routine-banner-title">
+                  <span>📅</span> Task 2 · Daily Calendar Audit & Conflict Guard (07:00 AM)
                 </div>
                 <div class="routine-banner-desc">
-                  Dot independently checked your inbox, evaluated today's agenda, and crawled 18 strategic news sources while you were offline.
+                  Dot inspected your Google Calendar for today: 5 meetings verified, 1 double-booking detected, and a 2-hour Deep Work block protected.
                 </div>
               </div>
-              <button id="btnApproveAllTop" onclick="approveAllDeliverables()" style="background:#10a37f; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap;">
-                ✓ 1-Click Approve All
+              <button onclick="approveCalendar()" class="btn-approve-primary" style="white-space:nowrap;">
+                ✓ Resolve Conflict Now
               </button>
             </div>
 
-            <!-- USER PROMPT -->
             <div class="chat-row user">
               <div class="user-msg-pill">
-                Check my morning emails, protect my calendar from conflicts, and summarize the latest AI & tech news.
+                Check my calendar for today, flag any overlapping meetings, and prepare reschedule options so my focus time and key meetings are protected.
               </div>
             </div>
 
-            <!-- ASSISTANT DOT RESPONSE -->
             <div class="chat-row assistant">
               <div class="chat-avatar-circle">●</div>
               <div class="assistant-msg-body">
-
-                <!-- REASONING ACCORDION -->
-                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtStepsBox1')">
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtCal')">
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                  <span>Thought for 3 seconds · Coordinated 3 specialist tools in cloud virtual sandbox</span>
+                  <span>Thought for 2 seconds · Checked Google Calendar & cross-referenced participant free/busy slots</span>
                 </div>
 
-                <div class="thought-steps-box" id="thoughtStepsBox1">
-                  [07:00:01] Connected to Gmail OAuth (Read-only background mode)<br>
-                  [07:00:02] Filtered 14 unread messages → Flagged 1 VIP SLA contract deadline (Urgency: 96/100)<br>
-                  [07:00:03] Cross-checked Google Calendar → Found hard overlap at 14:00 with Q3 Board Review<br>
-                  [07:00:04] Synthesized 18 RSS & financial news feeds into 3-minute executive summary
+                <div class="thought-steps-box" id="thoughtCal">
+                  [07:00:10] Synced Google Calendar events for Today (08:00 - 18:00)<br>
+                  [07:00:11] Detected hard overlap at 14:00: "Vendor Architecture Sync" vs "Executive Board Review"<br>
+                  [07:00:12] Queried organizer's free/busy schedule → Found open slots at 16:00 today & 10:00 tomorrow
                 </div>
 
-                <!-- TOOLS CALLED PILLS -->
                 <div class="tools-called-bar">
-                  <span class="tool-pill">🔍 Gmail: 14 unread scanned</span>
-                  <span class="tool-pill">📅 Google Calendar: Conflict detected</span>
-                  <span class="tool-pill">🌐 Proactive Web Crawl: 18 sources</span>
+                  <span class="tool-pill">📅 Google Calendar: 6 events today</span>
+                  <span class="tool-pill">⚠️ Conflict Detector: 1 overlap at 14:00</span>
+                  <span class="tool-pill">🛡️ Focus Time Guard: 10:00–12:00 locked</span>
                 </div>
 
                 <p>
-                  อรุณสวัสดิ์ครับท่านผู้บริหาร Dot ได้ดำเนินการตามตารางรอบ <strong>07:00 AM Executive Routine</strong> ในสภาพแวดล้อม Virtual Cloud เรียบร้อยแล้ว สรุป 3 ประเด็นสำคัญที่ต้องตัดสินใจในเช้าวันนี้:
+                  ผมตรวจสอบตารางปฏิทินวันนี้ของคุณเรียบร้อยแล้วครับ พบ <strong>นัดประชุมชนกัน 1 รายการ</strong> ในช่วงบ่าย และได้เตรียมทางเลือกเวลาใหม่ไว้ให้กดยืนยันได้ทันทีครับ:
                 </p>
 
-                <!-- DELIVERABLE 1: EMAIL TRIAGE -->
+                <!-- CONFLICT RESOLUTION CARD -->
                 <div class="deliverable-card">
                   <div class="deliverable-header">
                     <div class="deliverable-title">
-                      <span>📧</span> 1. อีเมลสัญญาลูกค้า VIP เร่งด่วน
-                    </div>
-                    <span class="urgency-badge" id="emailBadgeStatus">Urgency: 96/100 · ต้องการการอนุมัติ</span>
-                  </div>
-                  <p style="font-size:12px; color:#b0b0b0; margin-bottom:8px;">
-                    <strong>ผู้ส่ง:</strong> Sarah Jenkins (Managing Director, TechCorp) · <strong>หัวข้อ:</strong> ขอแก้ SLA สัญญาข้อ 4.2 เป็น 99.9% ก่อนการประชุมบอร์ดเวลา 14:00 น.
-                  </p>
-                  
-                  <div class="draft-preview-box" id="emailDraftDisplay">เรียน คุณ Sarah
-
-ทางเราได้พิจารณาข้อตกลงและเห็นชอบในการรับประกัน SLA 99.9% ตามสัญญา โดยได้จัดเตรียมเอกสารฉบับลงนามแนบมาพร้อมนี้เพื่อให้คณะกรรมการของท่านพิจารณาลงมติก่อนเวลา 14:00 น. เรียบร้อยครับ
-
-ขอแสดงความนับถือ
-สำนักงานผู้บริหาร</div>
-
-                  <textarea id="emailDraftEditor" class="draft-textarea" style="display:none;"></textarea>
-
-                  <div class="action-btn-row">
-                    <button class="btn-approve-primary" id="btnSendEmail" onclick="approveEmail()">
-                      ✓ Approve & Send via Gmail
-                    </button>
-                    <button class="btn-secondary" id="btnEditEmail" onclick="toggleEditDraft()">
-                      Edit Draft
-                    </button>
-                    <button class="btn-secondary" onclick="selectSidebarThread('sla')">
-                      🔍 ดูที่มาของสัญญาข้อ 4.2
-                    </button>
-                  </div>
-                </div>
-
-                <!-- DELIVERABLE 2: CALENDAR GUARDIAN -->
-                <div class="deliverable-card">
-                  <div class="deliverable-header">
-                    <div class="deliverable-title">
-                      <span>📅</span> 2. การจัดการปฏิทิน & ปกป้องเวลาทำงาน
+                      <span>⚠️</span> 1. ตรวจพบนัดประชุมชนกันเวลา 14:00 น.
                     </div>
                     <span id="calBadgeStatus" style="font-size:11px; font-weight:700; color:#818cf8; background:rgba(99,102,241,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(99,102,241,0.3);">
-                      Hard Conflict Resolved
+                      Conflict Resolution Ready
                     </span>
                   </div>
                   <p style="font-size:12px; color:#b0b0b0; margin-bottom:8px;">
-                    <strong>ตรวจพบนัดชน:</strong> มีคำขอนัดประชุมกลยุทธ์เวลา 14:00 น. ซ้อนทับกับ <strong>การประชุมคณะกรรมการบริหาร (Q3 Board of Directors Review 13:30 - 15:30)</strong>
+                    <strong>นัดที่ชนกัน:</strong> คำเชิญประชุม <em>Vendor Cloud Sync (14:00 – 15:00)</em> ซ้อนทับกับ <strong>การประชุมคณะกรรมการบริหาร (Board Review 13:30 – 15:30)</strong>
                   </p>
-                  <div class="draft-preview-box">🛡️ Dot ดำเนินการล็อกเวลาบอร์ดบริหาร และร่างข้อเสนอเลื่อนนัดหมายให้อีกฝ่ายเลือก 2 ช่วงเวลาที่ว่างจริง:
-• วันนี้เวลา 16:00 - 17:00 น. (มีเวลา Buffer พัก 30 นาที)
-• หรือวันพรุ่งนี้เวลา 10:00 - 11:00 น.</div>
+                  <div class="draft-preview-box">🛡️ <strong>ข้อเสนอของ Dot:</strong> ยืนยันเข้าร่วมประชุม Board Review ตามเดิม และส่งข้อความขอเลื่อนนัด Vendor Cloud Sync ไปยังช่วงเวลาที่ทุกฝ่ายว่างตรงกัน:
+• <strong>ตัวเลือกที่ 1 (แนะนำ):</strong> วันนี้ เวลา 16:00 – 17:00 น. (มีเวลาพัก 30 นาทีหลังประชุมบอร์ด)
+• <strong>ตัวเลือกที่ 2:</strong> วันพรุ่งนี้ เวลา 10:30 – 11:30 น.</div>
                   <div class="action-btn-row">
-                    <button class="btn-approve-primary" id="btnCalReschedule" onclick="approveCalendar()">
-                      ✓ Auto-Reschedule & Notify Organizer
+                    <button class="btn-approve-primary" id="btnCalReschedule" onclick="approveCalendar('16:00 น. วันนี้')">
+                      ✓ เลื่อนไป 16:00 น. วันนี้ & แจ้งผู้จัด
+                    </button>
+                    <button class="btn-secondary" onclick="approveCalendar('10:30 น. วันพรุ่งนี้')">
+                      เลื่อนไปพรุ่งนี้ 10:30 น.
                     </button>
                   </div>
                 </div>
 
-                <!-- DELIVERABLE 3: MORNING INTELLIGENCE -->
+                <!-- TODAY'S CLEAN AGENDA -->
                 <div class="deliverable-card">
                   <div class="deliverable-header">
                     <div class="deliverable-title">
-                      <span>📰</span> 3. สรุปข่าวกรองยุทธศาสตร์ยามเช้า (Executive TL;DR)
+                      <span>🗓️</span> 2. ภาพรวมตารางเวลาวันนี้ของคุณ (หลังจัดระเบียบ)
                     </div>
-                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(16,185,129,0.3);">
-                      3-Min Brief
+                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
+                      2h Focus Protected
                     </span>
                   </div>
-                  <div class="draft-preview-box" style="margin-bottom:8px;"><strong>• AI Agents:</strong> OpenAI และผู้พัฒนาชั้นนำเริ่มเปิดใช้งาน Always-on Agent สั่งงานข้ามแอปต่อเนื่อง
-<strong>• ตลาดทุน:</strong> หุ้นกลุ่มเทคโนโลยีปรับตัวขึ้น 1.4% หลังรายได้ Cloud Data Center สำหรับ AI เติบโตทำสถิติใหม่
-<strong>💡 Business Impact:</strong> ผู้บริหารที่เริ่มใช้เอเจนต์ช่วยงานแอดมินจะคืนเวลาโฟกัสกลยุทธ์ได้ทันที 20–30% ต่อสัปดาห์</div>
-                  
+                  <div class="draft-preview-box" style="margin-bottom:0;">• <strong>09:00 – 09:30 น.:</strong> Morning Leadership Standup (เตรียมสรุปประเด็นไว้ให้แล้ว)
+• <strong>10:00 – 12:00 น.:</strong> 🛡️ <strong>Protected Deep Work Block</strong> (Dot ปิดกั้นคำขอนัดแทรกอัตโนมัติ)
+• <strong>13:30 – 15:30 น.:</strong> Quarterly Board Strategy Review (ห้องประชุมใหญ่ / Zoom)
+• <strong>16:00 – 17:00 น.:</strong> Vendor Cloud Sync (หลังกดยืนยันเลื่อนนัด)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- THREAD 3: MORNING NEWS BRIEF (CUSTOMIZABLE TOPICS / TBC) -->
+          <!-- ======================================================== -->
+          <div id="thread-news" class="thread-panel">
+            <div class="routine-banner-card">
+              <div>
+                <div class="routine-banner-title">
+                  <span>📰</span> Task 3 · 07:00 AM Morning News Briefing (Topics Customizable)
+                </div>
+                <div class="routine-banner-desc">
+                  Synthesized from 22 global sources into a 3-minute briefing. Click any topic tag below to switch or customize the news focus.
+                </div>
+              </div>
+              <button onclick="toggleAudioPlayer()" class="btn-approve-primary" style="white-space:nowrap;">
+                🎧 Play Audio Brief
+              </button>
+            </div>
+
+            <div class="chat-row user">
+              <div class="user-msg-pill">
+                Summarize the latest news every morning at 07:00 AM based on my chosen topics so I can catch up in 3 minutes.
+              </div>
+            </div>
+
+            <div class="chat-row assistant">
+              <div class="chat-avatar-circle">●</div>
+              <div class="assistant-msg-body">
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtNews')">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Thought for 4 seconds · Crawled 22 news sources & filtered by User's active topic preferences</span>
+                </div>
+
+                <div class="thought-steps-box" id="thoughtNews">
+                  [07:00:01] Loaded User Topic Preferences (Customizable / TBC)<br>
+                  [07:00:02] Crawled Reuters, Bloomberg, TechCrunch, Financial Times & industry feeds<br>
+                  [07:00:04] Distilled key executive takeaways & generated 2m 45s audio podcast
+                </div>
+
+                <!-- CUSTOMIZABLE TOPIC SELECTOR (TOPIC TBC) -->
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:2px 0;">
+                  <span style="font-size:12px; color:#9e9e9e;">🎯 หัวข้อข่าวที่ติดตาม (คลิกเปลี่ยนได้):</span>
+                  <span class="topic-tag" onclick="switchNewsTopic('ai')">🤖 AI & Tech Trends</span>
+                  <span class="topic-tag" onclick="switchNewsTopic('market')">📈 Global Markets & Economy</span>
+                  <span class="topic-tag" onclick="switchNewsTopic('competitor')">🏢 Industry & Competitors</span>
+                  <span class="topic-tag" style="border-style:dashed; background:transparent;" onclick="promptCustomTopic()">+ กำหนดหัวข้อเอง (Topic TBC)</span>
+                </div>
+
+                <div class="deliverable-card">
+                  <div class="deliverable-header">
+                    <div class="deliverable-title" id="newsCardTitle">
+                      <span>🌅</span> สรุปข่าวเช้าประจำวัน (07:00 AM Executive TL;DR — อ่านจบใน 3 นาที)
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
+                      Updated 07:00 AM
+                    </span>
+                  </div>
+
+                  <div class="draft-preview-box" id="newsBriefContent"><strong>1. 🤖 AI & Autonomous Agents:</strong>
+OpenAI และผู้พัฒนาชั้นนำเริ่มขยายการใช้งาน Always-on Cloud Agents ที่สามารถแยก Thread ทำงานเบื้องหลัง (ตรวจอีเมล จัดตารางนัด และค้นคว้าข้อมูล) ได้เองโดยไม่ต้องรอคำสั่งทีละบรรทัด
+
+<strong>2. 📈 ตลาดทุนและเศรษฐกิจดิจิทัล:</strong>
+ดัชนีกลุ่มเทคโนโลยีและ Cloud Infrastructure ปรับตัวบวก +1.6% ในช่วงเช้า หลังองค์กรขนาดใหญ่เร่งลงทุนระบบอัตโนมัติสำหรับผู้บริหารเพื่อลดภาระงานรูทีน
+
+<strong>3. 💡 ผลกระทบและข้อเสนอแนะสำหรับคุณ:</strong>
+คู่แข่งในอุตสาหกรรมเริ่มนำ AI Assistant มาช่วยคัดกรองข้อมูลก่อนเข้าประชุมบอร์ด ทำให้ตัดสินใจได้เร็วขึ้น 30% แนะนำให้นำแนวทางนี้เข้าที่ประชุมกลยุทธ์สัปดาห์นี้ครับ</div>
+
                   <div class="action-btn-row">
-                    <button class="btn-secondary" onclick="toggleAudioPlayer()">
-                      🎧 ฟังเสียงบรรยาย (Audio Podcast)
+                    <button class="btn-approve-primary" onclick="toggleAudioPlayer()">
+                      🎧 ฟังสรุปข่าวด้วยเสียง (2:45 นาที)
+                    </button>
+                    <button class="btn-secondary" onclick="promptCustomTopic()">
+                      ⚙️ เปลี่ยนหัวข้อข่าวพรุ่งนี้ (Topic TBC)
                     </button>
                   </div>
 
                   <!-- Simulated Audio Player -->
                   <div class="audio-player-bar" id="audioPlayerBar">
-                    <span>🔊 กำลังเล่น: Morning Executive Briefing (00:18 / 02:45)</span>
+                    <span>🔊 กำลังเล่น: 07:00 AM Morning News Briefing (00:24 / 02:45)</span>
                     <div style="flex:1; height:4px; background:#2d4a43; border-radius:2px; overflow:hidden;">
-                      <div style="width:35%; height:100%; background:#10a37f;"></div>
+                      <div style="width:40%; height:100%; background:#10a37f;"></div>
                     </div>
                     <button onclick="toggleAudioPlayer()" style="background:transparent; border:none; color:#fff; cursor:pointer; font-size:12px;">✕ Stop</button>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
 
           <!-- ======================================================== -->
-          <!-- THREAD 2: BOARD SLA REVIEW FOLLOW-UP                     -->
+          <!-- THREAD 4: EMERGENCY SITUATION (USER NEEDS TO RESPOND)    -->
           <!-- ======================================================== -->
-          <div id="thread-sla" class="thread-panel">
-            <div class="chat-row user">
-              <div class="user-msg-pill">
-                ช่วยดึงประวัติสัญญาของ TechCorp ว่าทำไม Sarah ถึงขอแก้ SLA ข้อ 4.2 เป็น 99.9% และเช็กว่าทีม Tech ของเรารองรับได้ไหม ก่อนฉันเข้าประชุมบอร์ดบ่ายนี้
+          <div id="thread-emergency" class="thread-panel">
+            <div class="routine-banner-card emergency-banner">
+              <div>
+                <div class="routine-banner-title" style="color:#fda4af;">
+                  <span>🚨</span> EMERGENCY ESCALATION — Immediate User Decision Required
+                </div>
+                <div class="routine-banner-desc" style="color:#fecdd3;">
+                  Dot bypassed quiet mode because a Tier-1 VIP client ($1.2M ARR) requested an urgent SLA sign-off before their Board vote in 45 minutes.
+                </div>
               </div>
+              <span style="background:#e11d48; color:#fff; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700; white-space:nowrap;">
+                ⏳ Deadline: 45 mins
+              </span>
             </div>
 
+            <!-- DOT SPEAKS FIRST PROACTIVELY IN AN EMERGENCY -->
             <div class="chat-row assistant">
-              <div class="chat-avatar-circle">●</div>
+              <div class="chat-avatar-circle" style="background:linear-gradient(135deg, #e11d48, #9f1239);">!</div>
               <div class="assistant-msg-body">
-                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtStepsBox2')">
+                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtEmergency')">
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                  <span>Thought for 4 seconds · Searched Gmail threads, Google Drive contracts & Slack #infra</span>
+                  <span>Proactive Emergency Alert · Cross-checked VIP Gmail, Drive Contract & CTO System Telemetry</span>
                 </div>
 
-                <div class="thought-steps-box" id="thoughtStepsBox2">
-                  [Step 1] Searched Gmail for "TechCorp SLA 4.2" (Found 6 emails from last week)<br>
-                  [Step 2] Read Google Drive: TechCorp_Master_Agreement_v2.pdf (Clause 4.2 = 99.5% uptime)<br>
-                  [Step 3] Checked CTO's Slack note: Actual uptime over last 12 months is 99.96%
+                <div class="thought-steps-box" id="thoughtEmergency" style="border-left-color:#e11d48;">
+                  [11:42:05] Urgent VIP email received from Sarah Jenkins (MD, TechCorp) marked "CRITICAL: Board Vote in 45m"<br>
+                  [11:42:06] Pulled contract TechCorp_MSA_v2.pdf from Drive → Checked Clause 4.2 (Currently 99.5% SLA)<br>
+                  [11:42:07] Queried CTO live uptime telemetry → Actual 12-month uptime is 99.96% (Safe to approve 99.9%)<br>
+                  [11:42:08] Escalated immediately to User via App & iMessage because contract commitment requires human sign-off
                 </div>
 
                 <div class="tools-called-bar">
-                  <span class="tool-pill">📧 Gmail: 6 threads matched</span>
+                  <span class="tool-pill" style="border-color:#881337; color:#fda4af; background:#2a1219;">🚨 Priority Trigger: 99/100</span>
                   <span class="tool-pill">📄 Drive: TechCorp_MSA_v2.pdf</span>
-                  <span class="tool-pill">💬 Slack: CTO Uptime Report</span>
+                  <span class="tool-pill">📊 CTO Telemetry: 99.96% Uptime</span>
                 </div>
 
                 <p>
-                  ผมตรวจสอบเอกสารสัญญาเดิมและบันทึกจากทีมวิศวกรรมให้เรียบร้อยแล้วครับ สรุปข้อมูลสำคัญสำหรับใช้ในที่ประชุมบอร์ดเวลา 13:30 น.:
+                  <strong>แจ้งเตือนเหตุฉุกเฉินครับคุณ User:</strong> เมื่อ 3 นาทีที่แล้ว <strong>Sarah Jenkins (Managing Director, TechCorp — ลูกค้ารายใหญ่สุดของเรา)</strong> ส่งอีเมลด่วนที่สุดเข้ามา และเรื่องนี้ <strong>ต้องให้คุณเป็นคนตัดสินใจตอบกลับครับ</strong>
                 </p>
 
-                <div class="deliverable-card">
+                <div class="deliverable-card" style="border-color:#e11d48; background:#291d22;">
                   <div class="deliverable-header">
                     <div class="deliverable-title">
-                      <span>📄</span> เปรียบเทียบข้อสัญญา SLA Clause 4.2 (TechCorp Deal — มูลค่า $1.2M/ปี)
+                      <span>🔥</span> สถานการณ์ฉุกเฉิน: ลูกค้าขอปรับ SLA เป็น 99.9% ก่อนบอร์ดปิดโหวตในอีก 45 นาที
                     </div>
-                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
-                      Low Risk · CTO Approved
-                    </span>
+                    <span class="urgency-badge" id="emergencyStatusBadge">Waiting for User Decision</span>
                   </div>
-                  <div class="draft-preview-box">• <strong>สัญญาเดิม (Draft v2):</strong> รับประกัน Uptime ที่ 99.5%
-• <strong>สิ่งที่ลูกค้าขอแก้ (Sarah Jenkins):</strong> ปรับเพิ่มเป็น 99.9% เพื่อให้ผ่านเกณฑ์ Compliance ของบอร์ดฝั่งลูกค้า
-• <strong>ความพร้อมทางเทคนิคของเรา:</strong> ข้อมูลจาก CTO ยืนยันว่าระบบจริงของเรามี Uptime เฉลี่ย 12 เดือนย้อนหลังอยู่ที่ <strong>99.96%</strong> จึงสามารถอนุมัติ 99.9% ได้ทันทีโดยไม่มีต้นทุนเพิ่ม</div>
+
+                  <div class="draft-preview-box">• <strong>สิ่งที่เกิดขึ้น:</strong> คณะกรรมการของ TechCorp กำลังจะลงมติต่อสัญญารายปี ($1.2M) แต่ฝ่ายกฎหมายของลูกค้าต้องการคำยืนยันปรับ SLA ข้อ 4.2 จาก 99.5% เป็น <strong>99.9%</strong> ภายใน 45 นาทีนี้ มิฉะนั้นสัญญาจะถูกเลื่อนไปไตรมาสหน้า
+• <strong>ข้อมูลที่ Dot เช็กให้แล้ว:</strong> ผมดึงข้อมูล Uptime จริงจากระบบของ CTO ย้อนหลัง 12 เดือน พบว่าเราทำได้ <strong>99.96%</strong> อยู่แล้ว การอนุมัติ 99.9% จึง<strong>ไม่มีความเสี่ยงและไม่มีต้นทุนเพิ่ม</strong>ครับ</div>
+
+                  <p style="font-size:12.5px; color:#fda4af; margin-bottom:8px; font-weight:600;">
+                    ร่างคำตอบฉุกเฉินที่ Dot เตรียมไว้ให้ (คุณสามารถกดเลือกแนวทางตอบกลับด้านล่าง หรือพิมพ์สั่งการเองได้เลยครับ):
+                  </p>
+
+                  <div class="draft-preview-box" id="emergencyDraftDisplay">เรียน คุณ Sarah
+
+ผมขออนุมัติการปรับเงื่อนไขรับประกัน SLA ในสัญญาข้อ 4.2 เป็น 99.9% ตามที่คณะกรรมการของ TechCorp ต้องการครับ โดยได้แนบเอกสารยืนยันฉบับลงนามมาพร้อมอีเมลฉบับนี้ เพื่อให้ทันการลงมติในอีก 45 นาทีนี้เรียบร้อยครับ
+
+ขอแสดงความนับถือ
+User</div>
+
+                  <textarea id="emergencyDraftEditor" class="draft-textarea" style="display:none;"></textarea>
+
                   <div class="action-btn-row">
-                    <button class="btn-approve-primary" onclick="showToast('แนบสรุป SLA เข้าในเอกสารการประชุมบอร์ด 13:30 น. เรียบร้อยแล้ว')">
-                      📌 แนบสรุปนี้เข้าวาระประชุมบอร์ด 13:30 น.
+                    <button class="btn-approve-primary" id="btnEmergencyApprove" style="background:#e11d48;" onclick="resolveEmergency('approve')">
+                      ✓ 1. อนุมัติ 99.9% ทันที & ส่งเอกสารด่วน
                     </button>
-                    <button class="btn-secondary" onclick="selectSidebarThread('sweep')">
-                      ← กลับไปกดส่งอีเมลตอบ Sarah
+                    <button class="btn-secondary" id="btnEmergencyEdit" onclick="toggleEmergencyEdit()">
+                      ✏️ 2. แก้ไขข้อความก่อนส่ง
+                    </button>
+                    <button class="btn-secondary" onclick="resolveEmergency('call')">
+                      📞 3. ให้ Dot นัดสายด่วนคุยกับ Sarah 5 นาทีนี้
                     </button>
                   </div>
                 </div>
@@ -1279,83 +1494,14 @@
           </div>
 
           <!-- ======================================================== -->
-          <!-- THREAD 3: QUARTERLY REVENUE SUMMARY                      -->
-          <!-- ======================================================== -->
-          <div id="thread-revenue" class="thread-panel">
-            <div class="chat-row user">
-              <div class="user-msg-pill">
-                สรุปตัวเลขรายได้ Q3 เทียบกับข่าวตลาดเช้านี้ และช่วยเช็กปฏิทินว่าพรุ่งนี้มีคิวว่างคุยกับ CFO สัก 30 นาทีไหม
-              </div>
-            </div>
-
-            <div class="chat-row assistant">
-              <div class="chat-avatar-circle">●</div>
-              <div class="assistant-msg-body">
-                <div class="thought-disclosure" onclick="toggleThoughtDetails('thoughtStepsBox3')">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                  <span>Thought for 5 seconds · Analyzed Q3_ARR_Report.xlsx, Market News & CFO Calendar</span>
-                </div>
-
-                <div class="thought-steps-box" id="thoughtStepsBox3">
-                  [Step 1] Extracted KPIs from Google Sheets: Q3_Executive_Financials<br>
-                  [Step 2] Benchmarked against morning sector news (+14% industry average)<br>
-                  [Step 3] Checked Calendar availability for CEO + CFO tomorrow morning
-                </div>
-
-                <div class="tools-called-bar">
-                  <span class="tool-pill">📊 Sheets: Q3_ARR_Report.xlsx</span>
-                  <span class="tool-pill">📰 News: Sector Benchmark</span>
-                  <span class="tool-pill">📅 Calendar: CEO + CFO Sync</span>
-                </div>
-
-                <p>
-                  นี่คือบทสรุปผลประกอบการไตรมาส 3 เทียบกับภาพรวมตลาดเช้านี้ พร้อมตารางนัดหมาย CFO ครับ:
-                </p>
-
-                <div class="deliverable-card">
-                  <div class="deliverable-header">
-                    <div class="deliverable-title">
-                      <span>📈</span> 1. สรุปรายได้ Q3 เทียบข่าวคู่แข่งในอุตสาหกรรม
-                    </div>
-                    <span style="font-size:11px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">
-                      Outperforming (+24% YoY)
-                    </span>
-                  </div>
-                  <div class="draft-preview-box">• <strong>รายได้รวม Q3 (ARR):</strong> เติบโต <strong>+24.2% YoY</strong> (สูงกว่าค่าเฉลี่ยกลุ่มอุตสาหกรรมในข่าวเช้านี้ที่โต +14.0%)
-• <strong>Net Retention Rate:</strong> 118% จากกลุ่มลูกค้าองค์กรที่ต่อสัญญาเพิ่ม
-• <strong>ประเด็นข่าวสำคัญ:</strong> ตลาดกำลังให้ความสำคัญกับเรื่อง AI Automation ซึ่งสอดคล้องกับแผนลดต้นทุน Q4 ของเราพอดี</div>
-                </div>
-
-                <div class="deliverable-card">
-                  <div class="deliverable-header">
-                    <div class="deliverable-title">
-                      <span>📅</span> 2. ตารางเวลาว่างตรงกันกับ CFO (วันพรุ่งนี้)
-                    </div>
-                    <span style="font-size:11px; font-weight:700; color:#818cf8; background:rgba(99,102,241,0.15); padding:2px 8px; border-radius:10px;">
-                      Slot Available
-                    </span>
-                  </div>
-                  <div class="draft-preview-box">ตรวจพบช่วงเวลาที่ทั้งท่านและ CFO ว่างตรงกันในวันพรุ่งนี้:
-• <strong>เวลา 10:30 – 11:00 น.</strong> (หลังช่วง Focus Time ของท่าน และก่อนประชุมช่วงบ่าย)</div>
-                  <div class="action-btn-row">
-                    <button class="btn-approve-primary" id="btnBookCfo" onclick="bookCfoMeeting()">
-                      ✓ จองคิวนัด CFO พรุ่งนี้ 10:30 น. ทันที
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ======================================================== -->
-          <!-- THREAD 4: + NEW TASK / CHAT                              -->
+          <!-- THREAD 5: + NEW CHAT                                     -->
           <!-- ======================================================== -->
           <div id="thread-new" class="thread-panel">
             <div style="text-align:center; padding: 36px 20px 16px;">
               <div style="width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg, #ab68ff, #6830d9); display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; margin:0 auto 14px; box-shadow:0 8px 24px rgba(171,104,255,0.35);">●</div>
-              <h2 style="font-size:20px; font-weight:700; color:#fff; margin-bottom:6px;">สั่งงานหรือตั้ง Routine ใหม่ให้ Dot</h2>
+              <h2 style="font-size:20px; font-weight:700; color:#fff; margin-bottom:6px;">สั่งงานใหม่ หรือตั้ง Routine ให้ Dot</h2>
               <p style="font-size:13px; color:#9e9e9e; max-width:520px; margin:0 auto;">
-                มอบหมายงานให้ Dot ดูแลต่อเนื่องเบื้องหลัง ไม่ว่าจะเป็นการเฝ้าอีเมลสำคัญ จัดตารางปฏิทิน หรือสรุปข่าวทุกเช้า
+                Dot จะสร้าง Cloud Thread แยกตามงานให้อัตโนมัติ และแจ้งเตือนคุณเฉพาะเมื่อมีเรื่องสำคัญหรือเหตุฉุกเฉิน
               </p>
             </div>
 
@@ -1366,37 +1512,29 @@
                 <div style="font-size:12px; color:#8e8e8e;">"ช่วยเช็กอีเมลที่ยังไม่ได้อ่านตอนนี้ ถ้ามีเรื่องด่วนช่วยร่างคำตอบให้ด้วย"</div>
               </div>
 
-              <div class="hub-stat-card" onclick="simulateNewPrompt('เช็กตารางประชุมสัปดาห์นี้ มีนัดไหนชนกันหรือต้องเลื่อนไหม')">
+              <div class="hub-stat-card" onclick="simulateNewPrompt('เช็กตารางประชุมวันนี้และพรุ่งนี้ มีนัดไหนชนกันหรือต้องเลื่อนไหม')">
                 <div style="font-size:18px; margin-bottom:6px;">📅</div>
-                <div style="font-weight:700; color:#fff; font-size:13px; margin-bottom:4px;">ตรวจสอบปฏิทินสัปดาห์นี้</div>
-                <div style="font-size:12px; color:#8e8e8e;">"เช็กตารางประชุมสัปดาห์นี้ มีนัดไหนชนกันหรือต้องเลื่อนไหม"</div>
-              </div>
-
-              <div class="hub-stat-card" onclick="simulateNewPrompt('ตั้ง Routine สรุปข่าว AI และเศรษฐกิจส่งให้ฉันทุกเช้าตอน 7 โมง')">
-                <div style="font-size:18px; margin-bottom:6px;">📰</div>
-                <div style="font-weight:700; color:#fff; font-size:13px; margin-bottom:4px;">ตั้งเวลาสรุปข่าวทุกเช้า</div>
-                <div style="font-size:12px; color:#8e8e8e;">"ตั้ง Routine สรุปข่าว AI และเศรษฐกิจส่งให้ฉันทุกเช้าตอน 7 โมง"</div>
+                <div style="font-weight:700; color:#fff; font-size:13px; margin-bottom:4px;">ตรวจสอบปฏิทิน</div>
+                <div style="font-size:12px; color:#8e8e8e;">"เช็กตารางประชุมวันนี้และพรุ่งนี้ มีนัดไหนชนกันหรือต้องเลื่อนไหม"</div>
               </div>
             </div>
-
-            <div id="newChatDynamicMessages" style="display:flex; flex-direction:column; gap:16px; margin-top:10px;"></div>
           </div>
 
         </div>
 
         <!-- CHATGPT AUTHENTIC INPUT BAR -->
         <div class="dot-input-container">
-          <!-- Quick action chips -->
+          <!-- Quick navigation chips matching the 4 threads -->
           <div class="suggestion-pills">
-            <div class="s-pill" onclick="approveAllDeliverables()">⚡ Approve all actions</div>
-            <div class="s-pill" onclick="selectSidebarThread('sla')">📄 ดูการวิเคราะห์สัญญา SLA</div>
-            <div class="s-pill" onclick="selectSidebarThread('revenue')">📊 ดูสรุปรายได้ Q3 & นัด CFO</div>
-            <div class="s-pill" onclick="toggleAudioPlayer()">🎧 ฟังเสียงสรุปข่าวเช้า</div>
+            <div class="s-pill" onclick="selectSidebarThread('email')">📧 1. แชทจัดการอีเมล (Email)</div>
+            <div class="s-pill" onclick="selectSidebarThread('calendar')">📅 2. แชทตรวจปฏิทิน (Calendar)</div>
+            <div class="s-pill" onclick="selectSidebarThread('news')">📰 3. แชทสรุปข่าวเช้า (News Brief)</div>
+            <div class="s-pill" style="border-color:rgba(244,63,94,0.5); color:#fda4af;" onclick="selectSidebarThread('emergency')">🚨 4. แชทเหตุฉุกเฉิน (Emergency)</div>
           </div>
 
           <div class="input-box-wrapper">
             <span style="font-size:18px; color:#999; cursor:pointer;" title="Attach file">+</span>
-            <input type="text" id="dotChatInput" class="chatgpt-input-field" placeholder="Message Dot (e.g. 'Approve Sarah's email and clear my afternoon schedule')..." onkeypress="handleInputKey(event)">
+            <input type="text" id="dotChatInput" class="chatgpt-input-field" placeholder="Message Dot in this thread (e.g. 'Approve the reply', 'Change news topic to FinTech')..." onkeypress="handleInputKey(event)">
             <button class="send-arrow-btn" onclick="sendDotMessage()">↑</button>
           </div>
         </div>
@@ -1418,27 +1556,25 @@
         <span style="color:#007aff; font-size:13px; cursor:pointer;" onclick="switchMainView('app')">‹ ChatGPT App</span>
         <div style="display:flex; flex-direction:column; align-items:center;">
           <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, #ab68ff, #7928ca); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; font-weight:bold;">●</div>
-          <div style="font-size:13px; font-weight:700; color:#fff; margin-top:2px;">Dot (AI Chief of Staff)</div>
+          <div style="font-size:13px; font-weight:700; color:#fff; margin-top:2px;">Dot (AI Assistant)</div>
         </div>
         <span style="color:#007aff; font-size:18px;">ℹ</span>
       </div>
 
       <!-- Messages -->
       <div style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:13px; padding:0 4px;" id="phoneMessages">
-        <div style="text-align:center; font-size:10px; color:#777; margin:6px 0;">Today 07:00 AM · Proactive iMessage from Dot</div>
+        <div style="text-align:center; font-size:10px; color:#777; margin:6px 0;">Today · Proactive iMessage Alert from Dot</div>
         
         <div style="background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start; line-height:1.5;">
-          อรุณสวัสดิ์ครับท่านผู้บริหาร ☀️ Dot รันรอบ 07:00 AM เรียบร้อยแล้ว:<br><br>
-          📧 <strong>อีเมลด่วน:</strong> Sarah (TechCorp) ขออนุมัติ SLA 99.9% ก่อน 14:00 น. (ร่างคำตอบพร้อมส่ง)<br><br>
-          📅 <strong>ปฏิทิน:</strong> นัด 14:00 ชนกับ Board Review ร่างเลื่อนไป 16:00 ให้อีกฝ่ายแล้ว<br><br>
-          📰 <strong>ข่าวสาร:</strong> ข่าว AI & หุ้นเทคฯ บวก 1.4% สรุปพร้อมอ่านใน 3 นาที
+          อรุณสวัสดิ์ครับคุณ User ☀️ Dot แยกอัปเดตงานเช้านี้ไว้ในแอป 3 เรื่อง (Email, Calendar, News) เรียบร้อยแล้วครับ
         </div>
 
-        <div style="background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start;">
-          ต้องการอนุมัติส่งอีเมลและยืนยันเลื่อนนัดเลยไหมครับ?
+        <div style="background:#3b1822; border:1px solid #e11d48; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start; line-height:1.5;">
+          🚨 <strong>ด่วนที่สุด (Emergency):</strong> Sarah (TechCorp) ขออนุมัติปรับ SLA เป็น 99.9% ก่อนบอร์ดโหวตใน 45 นาที (ผมเช็กกับ CTO แล้ว Uptime เราอยู่ที่ 99.96% อนุมัติได้ทันที)<br><br>
+          ให้ผมส่งเอกสารยืนยันกลับไปหา Sarah เลยไหมครับ?
           <div style="margin-top:8px;">
-            <button onclick="phoneApprove()" style="background:#10a37f; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">
-              ✓ Approve ทั้งหมดใน 1 คลิก
+            <button onclick="phoneApproveEmergency()" style="background:#e11d48; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">
+              ✓ อนุมัติและส่งให้ Sarah ทันที
             </button>
           </div>
         </div>
@@ -1468,16 +1604,12 @@
       </div>
       <div style="font-size:13px; color:#ccc; display:flex; flex-direction:column; gap:12px;">
         <div style="background:#1c1c1c; padding:12px; border-radius:10px; border:1px solid #333;">
-          <strong style="color:#fff;">🟢 Unified Primary Dot (Single Point of Contact)</strong>
-          <p style="font-size:12px; color:#999; margin-top:2px;">ตามโครงสร้างจริงของ OpenAI ผู้บริหารสั่งงานผ่าน Primary Dot เพียงตัวเดียว แล้ว Dot จะทำหน้าที่กระจายงาน (Email, Calendar, News) บน Cloud VM โดยอัตโนมัติ</p>
+          <strong style="color:#fff;">🧵 Separate Cloud Threads per Task</strong>
+          <p style="font-size:12px; color:#999; margin-top:2px;">ตามโครงสร้างของ ChatGPT Dots เอเจนต์จะแยกเปิด Cloud Thread ของแต่ละงาน (Email, Calendar, News, และ Emergency Escalation) ไว้ในแถบ Recent History เพื่อไม่ให้เรื่องปนกัน</p>
         </div>
         <div style="background:#1c1c1c; padding:12px; border-radius:10px; border:1px solid #333;">
-          <strong style="color:#fff;">🔒 Safety & Read-Only Guardrails</strong>
-          <p style="font-size:12px; color:#999; margin-top:2px;">Background proactive research is strictly read-only. External actions (sending emails, modifying calendar) require 1-Click Executive Approval.</p>
-        </div>
-        <div style="background:#1c1c1c; padding:12px; border-radius:10px; border:1px solid #333;">
-          <strong style="color:#fff;">📱 Connected Channels</strong>
-          <p style="font-size:12px; color:#999; margin-top:2px;">• Gmail & Google Calendar (Personal OAuth)<br>• Apple iMessage / Android RCS Direct Texting</p>
+          <strong style="color:#fff;">🔒 Human-in-the-Loop for Important & Emergency Actions</strong>
+          <p style="font-size:12px; color:#999; margin-top:2px;">งานทั่วไป Dot คัดกรองให้อัตโนมัติ แต่การส่งอีเมลสำคัญหรือเหตุฉุกเฉิน (Emergency) จะแจ้งเตือนให้ User กดยืนยันเสมอ</p>
         </div>
       </div>
       <div style="margin-top:16px; text-align:right;">
@@ -1487,22 +1619,38 @@
   </div>
 
   <script>
-    let activeThreadId = 'sweep';
+    let activeThreadId = 'email';
+
+    const threadTitles = {
+      hub: 'Dot · Chief of Staff (Cloud Hub)',
+      email: 'Dot · Task 1: Handling Email & Drafts',
+      calendar: 'Dot · Task 2: Check Calendar & Conflicts',
+      news: 'Dot · Task 3: Morning News Brief (07:00 AM)',
+      emergency: 'Dot · 🚨 Emergency Escalation (Needs Response)',
+      new: 'Dot · Start New Task or Routine'
+    };
 
     function selectSidebarThread(threadKey) {
       activeThreadId = threadKey;
 
       // Clear active states in sidebar
-      document.getElementById('navDotHub').classList.remove('active');
-      document.getElementById('navSweep').classList.remove('active');
-      document.getElementById('navSla').classList.remove('active');
-      document.getElementById('navRevenue').classList.remove('active');
+      ['navDotHub', 'navEmail', 'navCalendar', 'navNews', 'navEmergency'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
 
       // Highlight selected sidebar item
       if (threadKey === 'hub') document.getElementById('navDotHub').classList.add('active');
-      if (threadKey === 'sweep') document.getElementById('navSweep').classList.add('active');
-      if (threadKey === 'sla') document.getElementById('navSla').classList.add('active');
-      if (threadKey === 'revenue') document.getElementById('navRevenue').classList.add('active');
+      if (threadKey === 'email') document.getElementById('navEmail').classList.add('active');
+      if (threadKey === 'calendar') document.getElementById('navCalendar').classList.add('active');
+      if (threadKey === 'news') document.getElementById('navNews').classList.add('active');
+      if (threadKey === 'emergency') document.getElementById('navEmergency').classList.add('active');
+
+      // Update header title
+      const headerTitle = document.getElementById('headerThreadTitle');
+      if (headerTitle && threadTitles[threadKey]) {
+        headerTitle.innerText = threadTitles[threadKey];
+      }
 
       // Hide all thread panels
       const panels = document.querySelectorAll('.thread-panel');
@@ -1525,7 +1673,7 @@
       box.classList.add('show');
       setTimeout(() => {
         box.classList.remove('show');
-      }, 3000);
+      }, 3200);
     }
 
     function switchMainView(mode) {
@@ -1554,91 +1702,170 @@
       }
     }
 
-    function toggleEditDraft() {
-      const display = document.getElementById('emailDraftDisplay');
-      const editor = document.getElementById('emailDraftEditor');
-      const btn = document.getElementById('btnEditEmail');
+    // EMAIL THREAD FUNCTIONS
+    function toggleEditEmailDraft(num) {
+      const display = document.getElementById(`emailDraftDisplay${num}`);
+      const editor = document.getElementById(`emailDraftEditor${num}`);
+      const btn = document.getElementById(`btnEditEmail${num}`);
 
       if (editor.style.display === 'none') {
         editor.value = display.innerText;
         display.style.display = 'none';
         editor.style.display = 'block';
-        btn.innerText = 'Save Draft';
+        btn.innerText = '💾 Save Draft';
         editor.focus();
       } else {
         display.innerText = editor.value;
         editor.style.display = 'none';
         display.style.display = 'block';
-        btn.innerText = 'Edit Draft';
+        btn.innerText = '✏️ Edit Draft';
         showToast('บันทึกร่างอีเมลที่แก้ไขเรียบร้อยแล้ว');
       }
     }
 
-    function approveEmail() {
-      const editor = document.getElementById('emailDraftEditor');
-      if (editor.style.display === 'block') {
-        toggleEditDraft();
+    function approveSingleEmail(num, recipient) {
+      const editor = document.getElementById(`emailDraftEditor${num}`);
+      if (editor && editor.style.display === 'block') {
+        toggleEditEmailDraft(num);
       }
-      const btn = document.getElementById('btnSendEmail');
-      const badge = document.getElementById('emailBadgeStatus');
-      btn.innerText = '✓ Sent via Gmail API';
+      const btn = document.getElementById(`btnSendEmail${num}`);
+      const badge = document.getElementById(`emailBadge${num}`);
+      btn.innerText = '✓ Sent via Gmail';
       btn.style.background = '#3b4252';
       btn.disabled = true;
-      badge.innerText = 'Dispatched ✓';
+      badge.innerText = 'Sent ✓';
       badge.style.background = 'rgba(16, 185, 129, 0.2)';
       badge.style.color = '#34d399';
       badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-      showToast('อนุมัติและส่งอีเมลตอบรับ SLA 99.9% ถึง Sarah Jenkins เรียบร้อยแล้ว');
+      showToast(`ส่งอีเมลตอบกลับถึง ${recipient} เรียบร้อยแล้ว`);
     }
 
-    function approveCalendar() {
+    function approveAllEmails() {
+      selectSidebarThread('email');
+      approveSingleEmail(1, 'David Chen');
+      approveSingleEmail(2, 'Elena Rostova');
+      showToast('อนุมัติและส่งอีเมลทั้ง 2 ฉบับเรียบร้อยแล้ว!');
+    }
+
+    // CALENDAR THREAD FUNCTIONS
+    function approveCalendar(slotLabel = '16:00 น. วันนี้') {
+      selectSidebarThread('calendar');
       const btn = document.getElementById('btnCalReschedule');
       const badge = document.getElementById('calBadgeStatus');
-      btn.innerText = '✓ Rescheduled to 16:00 & Notified';
+      btn.innerText = `✓ เลื่อนนัดไป ${slotLabel} เรียบร้อยแล้ว`;
       btn.style.background = '#3b4252';
       btn.disabled = true;
       badge.innerText = 'Calendar Synced ✓';
-      showToast('อัปเดตตารางเวลา Google Calendar และส่งอีเมลแจ้งผู้จัดประชุมเรียบร้อยแล้ว');
+      badge.style.color = '#34d399';
+      showToast(`อัปเดต Google Calendar ไปยังเวลา ${slotLabel} และแจ้งผู้จัดแล้ว`);
     }
 
-    function bookCfoMeeting() {
-      const btn = document.getElementById('btnBookCfo');
-      btn.innerText = '✓ จองคิวพรุ่งนี้ 10:30 น. เรียบร้อยแล้ว';
-      btn.style.background = '#3b4252';
-      btn.disabled = true;
-      showToast('ส่งคำเชิญประชุมไปยังปฏิทินของ CFO พรุ่งนี้เวลา 10:30 น. เรียบร้อยแล้ว');
+    // NEWS THREAD FUNCTIONS
+    function switchNewsTopic(topicKey) {
+      const contentBox = document.getElementById('newsBriefContent');
+      const titleBox = document.getElementById('newsCardTitle');
+      if (topicKey === 'ai') {
+        titleBox.innerHTML = '<span>🤖</span> สรุปข่าวเช้าหมวด: AI & Autonomous Technology (3-Min Brief)';
+        contentBox.innerHTML = `<strong>1. Always-On AI Agents:</strong>
+OpenAI เปิดตัวฟีเจอร์แยกรันงานเบื้องหลังเป็นแต่ละ Thread (Email, Calendar, News) ทำให้ผู้บริหารไม่ต้องคอยพิมพ์ถามซ้ำทุกเช้า
+
+<strong>2. Enterprise Adoption:</strong>
+ผลสำรวจล่าสุดชี้ว่าผู้บริหารที่ใช้ AI คัดกรองอีเมลและเตรียมข้อมูลประชุมสามารถลดเวลาทำงานแอดมินลงได้เฉลี่ย 1.5 ชั่วโมงต่อวัน`;
+      } else if (topicKey === 'market') {
+        titleBox.innerHTML = '<span>📈</span> สรุปข่าวเช้าหมวด: Global Markets & Macroeconomy (3-Min Brief)';
+        contentBox.innerHTML = `<strong>1. ตลาดหุ้นสหรัฐฯ และเอเชีย:</strong>
+ดัชนี S&P 500 และกลุ่มเทคโนโลยีปรับตัวขึ้น +1.4% จากผลประกอบการกลุ่ม Cloud และซอฟต์แวร์องค์กรที่เติบโตเกินคาด
+
+<strong>2. ทิศทางดอกเบี้ยและค่าเงิน:</strong>
+นักวิเคราะห์คาดการณ์อัตราดอกเบี้ยนโยบายทรงตัวในไตรมาสนี้ ส่งผลบวกต่อแผนการขยายการลงทุนของภาคธุรกิจ`;
+      } else if (topicKey === 'competitor') {
+        titleBox.innerHTML = '<span>🏢</span> สรุปข่าวเช้าหมวด: Industry & Competitor Moves (3-Min Brief)';
+        contentBox.innerHTML = `<strong>1. ความเคลื่อนไหวคู่แข่งในตลาด:</strong>
+บริษัทชั้นนำในอุตสาหกรรมประกาศจับมือพันธมิตรด้าน Cloud AI เพื่อยกระดับ SLA การให้บริการลูกค้าองค์กรเป็น 99.9%
+
+<strong>2. โอกาสทางธุรกิจ:</strong>
+ลูกค้าองค์กรให้ความสำคัญกับความเร็วในการตอบสนองสัญญา (Turnaround Time) ซึ่งเป็นจุดแข็งที่เราสามารถใช้ปิดดีลไตรมาสนี้ได้ทันที`;
+      }
+      showToast('อัปเดตสรุปข่าวตามหัวข้อที่เลือกเรียบร้อยแล้ว');
     }
 
-    function approveAllDeliverables() {
-      selectSidebarThread('sweep');
-      approveEmail();
-      approveCalendar();
-      const topBtn = document.getElementById('btnApproveAllTop');
-      topBtn.innerText = '✓ All Approved';
-      topBtn.style.background = '#3b4252';
-      showToast('อนุมัติรายการงานรอบ 07:00 AM ทั้งหมดเรียบร้อยแล้ว!');
+    function promptCustomTopic() {
+      const custom = prompt('ระบุหัวข้อข่าวที่คุณต้องการให้ Dot สรุปทุกเช้า (เช่น FinTech, Real Estate, Healthcare, Crypto):', 'FinTech & Banking Innovation');
+      if (custom && custom.trim()) {
+        const titleBox = document.getElementById('newsCardTitle');
+        const contentBox = document.getElementById('newsBriefContent');
+        titleBox.innerHTML = `<span>🎯</span> สรุปข่าวเช้าหมวดที่คุณกำหนดเอง: ${custom.trim()} (3-Min Brief)`;
+        contentBox.innerHTML = `<strong>1. อัปเดตล่าสุดด้าน ${custom.trim()}:</strong>
+Dot ตั้งค่าแหล่งข่าวสำหรับหมวด "${custom.trim()}" เรียบร้อยแล้ว และได้ดึงเทรนด์สำคัญของเช้านี้มาสรุปให้คุณอ่านจบใน 3 นาที
+
+<strong>2. ประเด็นเชิงกลยุทธ์ที่ต้องจับตา:</strong>
+ผู้เล่นรายใหญ่กำลังเร่งปรับตัวด้านกฎระเบียบและเทคโนโลยีอัตโนมัติ แนะนำให้ติดตามความเคลื่อนไหวต่อเนื่องในรอบ 07:00 น. พรุ่งนี้ครับ`;
+        showToast(`บันทึกหัวข้อข่าว "${custom.trim()}" สำหรับสรุปทุกเช้าเวลา 07:00 น. แล้ว`);
+      }
     }
 
     function toggleAudioPlayer() {
-      selectSidebarThread('sweep');
+      selectSidebarThread('news');
       const bar = document.getElementById('audioPlayerBar');
       if (bar.style.display === 'flex') {
         bar.style.display = 'none';
       } else {
         bar.style.display = 'flex';
-        showToast('กำลังเล่นเสียงสรุปข่าวยามเช้า (Audio Briefing)...');
+        showToast('กำลังเล่นเสียงสรุปข่าวเช้า (Audio Briefing)...');
+      }
+    }
+
+    // EMERGENCY THREAD FUNCTIONS
+    function toggleEmergencyEdit() {
+      const display = document.getElementById('emergencyDraftDisplay');
+      const editor = document.getElementById('emergencyDraftEditor');
+      const btn = document.getElementById('btnEmergencyEdit');
+
+      if (editor.style.display === 'none') {
+        editor.value = display.innerText;
+        display.style.display = 'none';
+        editor.style.display = 'block';
+        btn.innerText = '💾 บันทึกข้อความฉุกเฉิน';
+        editor.focus();
+      } else {
+        display.innerText = editor.value;
+        editor.style.display = 'none';
+        display.style.display = 'block';
+        btn.innerText = '✏️ 2. แก้ไขข้อความก่อนส่ง';
+        showToast('บันทึกข้อความตอบกลับฉุกเฉินเรียบร้อยแล้ว');
+      }
+    }
+
+    function resolveEmergency(actionType) {
+      const editor = document.getElementById('emergencyDraftEditor');
+      if (editor && editor.style.display === 'block') {
+        toggleEmergencyEdit();
+      }
+
+      const btn = document.getElementById('btnEmergencyApprove');
+      const badge = document.getElementById('emergencyStatusBadge');
+      const sidebarBadge = document.getElementById('sidebarUrgentBadge');
+
+      if (actionType === 'approve') {
+        btn.innerText = '✓ ส่งเอกสารยืนยัน SLA 99.9% ให้ Sarah แล้ว';
+        btn.style.background = '#10a37f';
+        btn.disabled = true;
+        badge.innerText = 'Resolved ✓';
+        badge.style.background = 'rgba(16, 185, 129, 0.2)';
+        badge.style.color = '#34d399';
+        badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        if (sidebarBadge) {
+          sidebarBadge.innerText = 'Done';
+          sidebarBadge.style.background = '#10a37f';
+        }
+        showToast('ส่งอีเมลยืนยัน SLA 99.9% พร้อมเอกสารแนบให้ Sarah ทันเวลาก่อนประชุมบอร์ดแล้ว!');
+      } else {
+        showToast('Dot กำลังส่งลิงก์ด่วนนัดคุยสาย 5 นาทีให้ Sarah Jenkins ทันทีครับ');
       }
     }
 
     function runSweepAgain() {
-      selectSidebarThread('sweep');
-      const title = document.getElementById('routineBannerTitle');
-      title.innerHTML = '<span>🔄</span> Running Cloud Sandbox Sweep...';
-      showToast('กำลังสแกน Gmail, Google Calendar และแหล่งข่าวใหม่...');
-      setTimeout(() => {
-        title.innerHTML = '<span>✓</span> Proactive 07:00 AM Routine Completed (Just Synced)';
-        showToast('ซิงค์ข้อมูลล่าสุดจาก Cloud Computer เรียบร้อยแล้ว');
-      }, 1200);
+      showToast('กำลังซิงค์ข้อมูลล่าสุดของ Thread นี้กับ Cloud Computer...');
     }
 
     function toggleSettingsModal() {
@@ -1676,27 +1903,30 @@
         const dotRow = document.createElement('div');
         dotRow.className = 'chat-row assistant';
         
-        let responseContent = `รับทราบครับ: "${text}" Dot ได้บันทึกคำสั่งและประสานงานผ่าน Cloud Sandbox (Gmail / Calendar / Web) เรียบร้อยแล้วครับ`;
-        if (text.toLowerCase().includes('approve') || text.toLowerCase().includes('อนุมัติ') || text.toLowerCase().includes('ส่ง')) {
-          responseContent = `✓ ดำเนินการอนุมัติส่งอีเมลถึง Sarah และอัปเดตตารางนัดหมาย 16:00 น. เรียบร้อยแล้วครับ!`;
-          approveEmail();
+        let responseContent = `รับทราบครับคุณ User: "${text}" — Dot ดำเนินการใน Thread นี้ให้เรียบร้อยแล้วครับ`;
+        if (activeThreadId === 'emergency') {
+          resolveEmergency('approve');
+          responseContent = `✓ รับคำสั่งตัดสินใจจากคุณ User แล้วครับ! ผมส่งอีเมลยืนยัน SLA 99.9% พร้อมแนบสัญญาให้คุณ Sarah Jenkins ทันก่อนบอร์ดปิดโหวตเรียบร้อยแล้วครับ`;
+        } else if (activeThreadId === 'email' && (text.toLowerCase().includes('approve') || text.includes('อนุมัติ') || text.includes('ส่ง'))) {
+          approveAllEmails();
+          responseContent = `✓ อนุมัติและส่งอีเมลตอบกลับทั้ง 2 ฉบับให้เรียบร้อยแล้วครับ`;
+        } else if (activeThreadId === 'calendar' && (text.includes('เลื่อน') || text.toLowerCase().includes('reschedule'))) {
           approveCalendar();
-        } else if (text.includes('Routine') || text.includes('7 โมง')) {
-          responseContent = `✓ ตั้งค่า Recurring Routine เรียบร้อยครับ! Dot จะตื่นขึ้นมาสแกนอีเมล ตรวจปฏิทิน และสรุปข่าวส่งให้ท่านทุกวันเวลา 07:00 น. อัตโนมัติครับ`;
+          responseContent = `✓ เลื่อนนัดที่ชนกันไปเวลา 16:00 น. วันนี้ และแจ้งผู้จัดงานเรียบร้อยแล้วครับ`;
         }
 
         dotRow.innerHTML = `
           <div class="chat-avatar-circle">●</div>
           <div class="assistant-msg-body">
             <div class="thought-disclosure">
-              <span>Thought for 2 seconds · Executed in cloud virtual environment</span>
+              <span>Thought for 2 seconds · Executed in dedicated cloud thread</span>
             </div>
             <p>${responseContent}</p>
           </div>
         `;
         activePanel.appendChild(dotRow);
         stream.scrollTop = stream.scrollHeight;
-      }, 600);
+      }, 500);
     }
 
     function handlePhoneKey(e) {
@@ -1719,26 +1949,26 @@
       setTimeout(() => {
         const dotBubble = document.createElement('div');
         dotBubble.style.cssText = "background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start;";
-        dotBubble.innerText = "✓ รับทราบครับ Dot ดำเนินการให้เรียบร้อยแล้วครับ!";
+        dotBubble.innerText = "✓ รับทราบครับคุณ User Dot ดำเนินการและอัปเดตสถานะในแอปให้เรียบร้อยแล้วครับ!";
         container.appendChild(dotBubble);
         container.scrollTop = container.scrollHeight;
       }, 500);
     }
 
-    function phoneApprove() {
+    function phoneApproveEmergency() {
       const container = document.getElementById('phoneMessages');
       const userBubble = document.createElement('div');
       userBubble.style.cssText = "background:#007aff; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-end;";
-      userBubble.innerText = "✓ Approve ทั้งหมด";
+      userBubble.innerText = "✓ อนุมัติและส่งให้ Sarah ทันที";
       container.appendChild(userBubble);
 
       setTimeout(() => {
         const dotBubble = document.createElement('div');
         dotBubble.style.cssText = "background:#262729; color:#fff; padding:10px 14px; border-radius:18px; max-width:88%; align-self:flex-start;";
-        dotBubble.innerHTML = "✓ ส่งอีเมลตอบ Sarah และยืนยันเลื่อนนัดหมายไป 16:00 เรียบร้อยแล้วครับ 🚀";
+        dotBubble.innerHTML = "✓ ส่งเอกสารยืนยัน SLA 99.9% ให้คุณ Sarah Jenkins ทันเวลาเรียบร้อยแล้วครับ 🚀";
         container.appendChild(dotBubble);
         container.scrollTop = container.scrollHeight;
-        approveAllDeliverables();
+        resolveEmergency('approve');
       }, 500);
     }
   </script>
