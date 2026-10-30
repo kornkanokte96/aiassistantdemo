@@ -37,6 +37,7 @@
       font-size: 14px;
       line-height: 1.6;
       height: 100vh;
+      height: 100dvh;
       width: 100vw;
       overflow: hidden;
       display: flex;
@@ -130,6 +131,7 @@
       justify-content: center;
       align-items: stretch;
       overflow: hidden;
+      min-height: 0;
     }
 
     /* REAL CHATGPT DOT APP CONTAINER */
@@ -147,12 +149,150 @@
       position: relative;
     }
 
+    /* MOBILE NAV DRAWER & BUTTON */
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--chatgpt-border);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(2px);
+      z-index: 499;
+    }
+
     @media (max-width: 900px) {
+      .global-bar {
+        padding: 6px 12px;
+        height: 48px;
+      }
+      .brand-title {
+        font-size: 13px;
+      }
+      .dot-badge {
+        font-size: 9px;
+        padding: 1px 6px;
+      }
+      .mode-tab-btn {
+        padding: 4px 10px;
+        font-size: 11px;
+      }
+      .app-stage {
+        padding: 0;
+        border-radius: 0;
+      }
       .chatgpt-app-window {
         grid-template-columns: 1fr;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
       }
       .chatgpt-sidebar {
+        position: fixed;
+        left: -320px;
+        top: 0;
+        bottom: 0;
+        width: 290px;
+        max-width: 85vw;
+        z-index: 500;
+        transition: left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.7);
+      }
+      .chatgpt-sidebar.mobile-open {
+        left: 0;
+      }
+      .sidebar-backdrop.mobile-open {
+        display: block;
+      }
+      .dot-canvas-header {
+        padding: 8px 12px;
+        gap: 8px;
+      }
+      .dot-hero-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+      .dot-header-text h3 {
+        font-size: 13px;
+      }
+      .dot-header-text p {
+        font-size: 11px;
         display: none;
+      }
+      .dot-cloud-indicator {
+        font-size: 10px;
+        padding: 1px 6px;
+      }
+      .btn-dot-action {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+      .dot-chat-stream {
+        padding: 12px 12px;
+        gap: 14px;
+      }
+      .routine-banner-card {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .hub-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .chat-row {
+        gap: 8px;
+      }
+      .user-msg-pill {
+        max-width: 90%;
+        font-size: 13px;
+        padding: 8px 14px;
+      }
+      .deliverable-card {
+        padding: 12px;
+      }
+      .deliverable-title {
+        font-size: 13px;
+      }
+      .draft-preview-box {
+        font-size: 12px;
+        padding: 10px;
+        line-height: 1.55;
+      }
+      .action-btn-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .action-btn-row button {
+        width: 100%;
+        justify-content: center;
+        padding: 9px 12px;
+        font-size: 12px;
+      }
+      .dot-input-container {
+        padding: 8px 12px 10px;
+      }
+      .imessage-modal-view {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        border: none;
+        padding: 8px 10px;
       }
     }
 
@@ -967,12 +1107,16 @@
     <main id="viewAppContainer" class="chatgpt-app-window">
       
       <!-- LEFT SIDEBAR -->
-      <aside class="chatgpt-sidebar">
+      <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
+      <aside class="chatgpt-sidebar" id="appSidebar">
         <div class="sidebar-top">
-          <button class="new-chat-btn" onclick="selectSidebarThread('new')">
-            <span>+ New chat</span>
-            <span style="font-size:11px; opacity:0.6;">⌘K</span>
-          </button>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <button class="new-chat-btn" style="flex:1;" onclick="selectSidebarThread('new'); closeMobileSidebar();">
+              <span>+ New chat</span>
+              <span style="font-size:11px; opacity:0.6;">⌘K</span>
+            </button>
+            <button onclick="toggleMobileSidebar()" class="mobile-menu-btn" style="margin-left:6px; padding:8px 10px;">✕</button>
+          </div>
 
           <!-- YOUR PRIMARY DOT (SINGLE UNIFIED AGENT AS IN REAL CHATGPT DOTS) -->
           <div class="sidebar-section-title">Your Dots</div>
@@ -1025,13 +1169,16 @@
         <!-- DOT PROFILE / CANVAS HEADER -->
         <div class="dot-canvas-header">
           <div class="dot-info-cluster">
+            <button class="mobile-menu-btn" onclick="toggleMobileSidebar()" title="Open Menu">
+              ☰
+            </button>
             <div class="dot-hero-avatar">●</div>
             <div class="dot-header-text">
               <h3>
                 <span id="headerThreadTitle">Dot · Email Triage & Auto-Drafting</span>
                 <span class="dot-cloud-indicator">
                   <span style="width:6px; height:6px; background:#10a37f; border-radius:50%;"></span>
-                  Always-on Cloud Thread
+                  Cloud
                 </span>
               </h3>
               <p id="headerSubText">Dedicated Cloud Computer · Connected to Gmail, Google Calendar & Live Web</p>
@@ -1754,8 +1901,27 @@ User</div>
       new: 'Dot · Start New Task or Routine'
     };
 
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar && backdrop) {
+        sidebar.classList.toggle('mobile-open');
+        backdrop.classList.toggle('mobile-open');
+      }
+    }
+
+    function closeMobileSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar && backdrop) {
+        sidebar.classList.remove('mobile-open');
+        backdrop.classList.remove('mobile-open');
+      }
+    }
+
     function selectSidebarThread(threadKey) {
       activeThreadId = threadKey;
+      closeMobileSidebar();
 
       // Clear active states in sidebar
       ['navDotHub', 'navEmail', 'navCalendar', 'navNews', 'navEmergency'].forEach(id => {
